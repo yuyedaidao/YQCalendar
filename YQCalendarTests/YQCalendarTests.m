@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-
+#import <DateTools.h>
 @interface YQCalendarTests : XCTestCase
 
 @end
@@ -28,6 +28,14 @@
 - (void)testExample {
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");
+    
+}
+
+- (void)testMothThan{
+    NSDate *max = [NSDate dateWithYear:2015 month:12 day:29];
+    NSDate *min = [NSDate dateWithYear:2015 month:11 day:30];
+    NSLog(@"dis = %ld",[max monthsLaterThan:min]);
+    NSAssert([max monthsLaterThan:min]==1, @"不对啊");
 }
 
 - (void)testPerformanceExample {

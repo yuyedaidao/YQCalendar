@@ -7,9 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "YQCalendarAppearence.h"
 
 @interface YQCalendar : UIView
 
 - (instancetype)init;
 - (instancetype)initWithFrame:(CGRect)frame;
+- (instancetype)initWithAppearence:(YQCalendarAppearence *)appearence;
+- (instancetype)initWithFrame:(CGRect)frame appearence:(YQCalendarAppearence *)appearence;
+
+@property (nonatomic, strong) YQCalendarAppearence *appearence;
+
 @end

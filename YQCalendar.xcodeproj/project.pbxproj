@@ -15,7 +15,9 @@
 		55A95F1C1B84C3DE005DFD41 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55A95F1A1B84C3DE005DFD41 /* LaunchScreen.xib */; };
 		55A95F281B84C3DE005DFD41 /* YQCalendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A95F271B84C3DE005DFD41 /* YQCalendarTests.m */; };
 		55A95F361B84C46F005DFD41 /* YQCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A95F351B84C46F005DFD41 /* YQCalendar.m */; };
+		55A95F391B84D1FF005DFD41 /* YQCalendarAppearence.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A95F381B84D1FF005DFD41 /* YQCalendarAppearence.m */; };
 		C74B3F6B34B31AE85504F222 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA49B1956EF763E026F838AD /* libPods.a */; };
+		DACDEA1016120CDBA523A764 /* libPods-YQCalendarTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84052D7961F83C62B4D8A966 /* libPods-YQCalendarTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0BBA89EDD22D8817DA87D9B2 /* Pods-YQCalendarTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YQCalendarTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YQCalendarTests/Pods-YQCalendarTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2962D7C493F8B27457F5A992 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		55A95F081B84C3DE005DFD41 /* YQCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YQCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55A95F0C1B84C3DE005DFD41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,8 +48,12 @@
 		55A95F271B84C3DE005DFD41 /* YQCalendarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YQCalendarTests.m; sourceTree = "<group>"; };
 		55A95F341B84C46F005DFD41 /* YQCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YQCalendar.h; sourceTree = "<group>"; };
 		55A95F351B84C46F005DFD41 /* YQCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YQCalendar.m; sourceTree = "<group>"; };
+		55A95F371B84D1FF005DFD41 /* YQCalendarAppearence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YQCalendarAppearence.h; sourceTree = "<group>"; };
+		55A95F381B84D1FF005DFD41 /* YQCalendarAppearence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YQCalendarAppearence.m; sourceTree = "<group>"; };
+		84052D7961F83C62B4D8A966 /* libPods-YQCalendarTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YQCalendarTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA49B1956EF763E026F838AD /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8E4C74E9AE8D3AF9D3AE577 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		FF5C974FD91B7D4BD0E501DB /* Pods-YQCalendarTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YQCalendarTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YQCalendarTests/Pods-YQCalendarTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DACDEA1016120CDBA523A764 /* libPods-YQCalendarTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +81,8 @@
 			children = (
 				B8E4C74E9AE8D3AF9D3AE577 /* Pods.debug.xcconfig */,
 				2962D7C493F8B27457F5A992 /* Pods.release.xcconfig */,
+				0BBA89EDD22D8817DA87D9B2 /* Pods-YQCalendarTests.debug.xcconfig */,
+				FF5C974FD91B7D4BD0E501DB /* Pods-YQCalendarTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -144,6 +154,8 @@
 			children = (
 				55A95F341B84C46F005DFD41 /* YQCalendar.h */,
 				55A95F351B84C46F005DFD41 /* YQCalendar.m */,
+				55A95F371B84D1FF005DFD41 /* YQCalendarAppearence.h */,
+				55A95F381B84D1FF005DFD41 /* YQCalendarAppearence.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -152,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				AA49B1956EF763E026F838AD /* libPods.a */,
+				84052D7961F83C62B4D8A966 /* libPods-YQCalendarTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -182,9 +195,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 55A95F2E1B84C3DE005DFD41 /* Build configuration list for PBXNativeTarget "YQCalendarTests" */;
 			buildPhases = (
+				479DAF647E2F8D78F92BEF02 /* Check Pods Manifest.lock */,
 				55A95F1D1B84C3DE005DFD41 /* Sources */,
 				55A95F1E1B84C3DE005DFD41 /* Frameworks */,
 				55A95F1F1B84C3DE005DFD41 /* Resources */,
+				55BE4858441831D152D5DCF2 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -284,6 +299,36 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		479DAF647E2F8D78F92BEF02 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		55BE4858441831D152D5DCF2 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YQCalendarTests/Pods-YQCalendarTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -293,6 +338,7 @@
 			files = (
 				55A95F141B84C3DE005DFD41 /* ViewController.m in Sources */,
 				55A95F111B84C3DE005DFD41 /* AppDelegate.m in Sources */,
+				55A95F391B84D1FF005DFD41 /* YQCalendarAppearence.m in Sources */,
 				55A95F0E1B84C3DE005DFD41 /* main.m in Sources */,
 				55A95F361B84C46F005DFD41 /* YQCalendar.m in Sources */,
 			);
@@ -440,6 +486,7 @@
 		};
 		55A95F2F1B84C3DE005DFD41 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0BBA89EDD22D8817DA87D9B2 /* Pods-YQCalendarTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -459,6 +506,7 @@
 		};
 		55A95F301B84C3DE005DFD41 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF5C974FD91B7D4BD0E501DB /* Pods-YQCalendarTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (

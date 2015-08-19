@@ -9,6 +9,21 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Kiwi.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Masonry.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-YQCalendarTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -17,12 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>D6B5E21AF4A2B592AFC4D7F0E4A761EF</key>
+		<key>7C4BA7DBE428CC410A845611D27A7A4A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F211E375C57A8EF631A52E6F58C7F232</key>
+		<key>89A976D14B632815BBC875A6F9BCB4C3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C65004858B6294A27E56BD7B21C99CDB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C68DA349DF1F098DD663F0666C100128</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EC62B4177F0C8B09AA4E0EB0C95074EB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
