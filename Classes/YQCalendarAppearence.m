@@ -10,4 +10,11 @@
 
 @implementation YQCalendarAppearence
 
+- (instancetype)init{
+    if(self = [super init]){
+        _calendarBackgroundColor = [UIColor groupTableViewBackgroundColor];
+    }
+    
+    return self;
+}
 @end
