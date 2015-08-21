@@ -15,14 +15,17 @@ static NSInteger const ColumnCount = 7;
 @interface YQCalendarAppearence : NSObject
 
 @property (nonatomic, strong) UIColor *calendarBackgroundColor;
+@property (nonatomic, assign) BOOL firstDayIsSunday;
 
-
+@property (nonatomic, strong) UIColor *headerTextColor;
+@property (nonatomic, strong) UIFont *headerFont;
+@property (nonatomic, strong) UIColor *headerBackgroundColor;
+@property (nonatomic, assign) CGFloat headerHeight;
 
 @property (nonatomic, strong) UIColor *cellTextNormalColor;
 @property (nonatomic, strong) UIColor *cellTextTodayColor;
 @property (nonatomic, strong) UIColor *cellTextSelectColor;
 @property (nonatomic, strong) UIColor *cellTextOtherMonthColor;
-
 @property (nonatomic, strong) UIColor *cellTextCircleNormalColor;
 @property (nonatomic, strong) UIColor *cellTextCircleTodayColor;
 @property (nonatomic, strong) UIColor *cellFlagDotNormalColor;

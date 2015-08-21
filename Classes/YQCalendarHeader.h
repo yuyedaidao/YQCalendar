@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface YQCalendarHeader : UIView
-- (instancetype)initWithFrame:(CGRect)frame firstDayIsSunday:(BOOL)sunday;
+
 @end

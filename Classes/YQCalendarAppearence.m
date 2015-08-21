@@ -15,6 +15,12 @@ static YQCalendarAppearence *_yqAppearence = nil;
 - (instancetype)init{
     if(self = [super init]){
         _calendarBackgroundColor = [UIColor groupTableViewBackgroundColor];
+        _firstDayIsSunday = NO;
+        
+        _headerTextColor = [UIColor whiteColor];
+        _headerFont = [UIFont systemFontOfSize:14];
+        _headerBackgroundColor = _calendarBackgroundColor;
+        _headerHeight = 80.0f;
         
         _cellTextNormalColor = [UIColor whiteColor];
         _cellTextTodayColor = [UIColor blueColor];

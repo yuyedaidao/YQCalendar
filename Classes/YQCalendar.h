@@ -37,7 +37,6 @@ typedef NS_ENUM(NSUInteger, YQCalendarModel) {
 @property (nonatomic, strong) NSDate *selectedDate;
 @property (nonatomic, strong) IBInspectable NSDate *minDate;
 @property (nonatomic, strong) IBInspectable NSDate *maxDate;
-@property (nonatomic, assign) IBInspectable BOOL firstIsSunday;
 
 @property (nonatomic, assign) YQCalendarModel model;
 

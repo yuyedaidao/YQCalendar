@@ -10,6 +10,7 @@
 #import <Masonry.h>
 #import <DateTools.h>
 #import "YQCalendarCell.h"
+#import "YQCalendarHeader.h"
 
 static NSString *const Identifier = @"YQCalendarCell";
 
@@ -22,7 +23,7 @@ static NSString *const Identifier = @"YQCalendarCell";
 @property (nonatomic, strong, readonly) NSDate *selectedBeginningDate;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UICollectionViewFlowLayout *collectionLayout;
-
+@property (nonatomic, strong) YQCalendarHeader *headerView;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
 
 @end
@@ -85,10 +86,12 @@ static NSString *const Identifier = @"YQCalendarCell";
     
     [self.collectionView registerClass:[YQCalendarCell class] forCellWithReuseIdentifier:Identifier];
     
-    
     [self addSubview:self.collectionView];
 
 
+    //header
+    _headerView = [[YQCalendarHeader alloc] init];
+    [self addSubview:self.headerView];
 }
 
 
@@ -128,7 +131,7 @@ static NSString *const Identifier = @"YQCalendarCell";
     model.month = firstDay.month;
     //星期几
     NSInteger week = firstDay.weekday;//如果星期天是一周的第一天，那么这个月的第一天就在indexPath.row为week-1的位置上
-    model.date = [firstDay dateByAddingDays:index-week+(self.firstIsSunday?1:2)];
+    model.date = [firstDay dateByAddingDays:index-week+([YQCalendarAppearence share].firstDayIsSunday?1:2)];
     return model;
 }
 
@@ -136,7 +139,8 @@ static NSString *const Identifier = @"YQCalendarCell";
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.collectionView.frame = self.bounds;
+    self.headerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.collectionView.bounds), [YQCalendarAppearence share].headerHeight);
+    self.collectionView.frame = CGRectMake(0, CGRectGetMaxY(self.headerView.frame),CGRectGetWidth(self.bounds) , CGRectGetHeight(self.bounds)-[YQCalendarAppearence share].headerHeight);
     CGFloat width = CGRectGetWidth(self.collectionView.bounds)/ColumnCount;
     CGFloat height = CGRectGetHeight(self.collectionView.bounds)/RowCount;
     self.collectionLayout.itemSize = CGSizeMake(width, height);
