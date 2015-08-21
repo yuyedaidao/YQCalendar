@@ -11,8 +11,6 @@
 #import <DateTools.h>
 #import "YQCalendarCell.h"
 
-static NSInteger const RowCount = 6;
-static NSInteger const ColumnCount = 7;
 static NSString *const Identifier = @"YQCalendarCell";
 
 @interface YQCalendar ()<UICollectionViewDataSource,UICollectionViewDelegate>
@@ -204,10 +202,18 @@ static NSString *const Identifier = @"YQCalendarCell";
     [cell reset];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+}
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+    DDLogInfo(@"scroll animation end");
+}
+
 #pragma mark public
 - (void)changeModel{
     //如果当前月份有选中时间滚动到这个时间所在的行
     //如果当前月份有今天就滚动到今天所在的行
     //如果什么都没有就滚动到第一行
+
 }
 @end

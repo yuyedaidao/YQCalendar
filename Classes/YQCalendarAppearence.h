@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+static NSInteger const RowCount = 6;
+static NSInteger const ColumnCount = 7;
+
 @interface YQCalendarAppearence : NSObject
 
 @property (nonatomic, strong) UIColor *calendarBackgroundColor;
