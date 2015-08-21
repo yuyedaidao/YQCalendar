@@ -4,34 +4,64 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>CocoaLumberjack.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
 		<key>DateTools.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 		<key>Kiwi.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 		<key>Masonry.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 		<key>Pods-YQCalendarTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>5</integer>
 		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>4</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>01066063172A1FB1B3A3588F8F12DAB5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2E1F1DF876294B414EDC28B401CFD3D9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>47294A16507245FF8B135B33EA651B5B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>7C4BA7DBE428CC410A845611D27A7A4A</key>
 		<dict>
 			<key>primary</key>
@@ -48,6 +78,16 @@
 			<true/>
 		</dict>
 		<key>C68DA349DF1F098DD663F0666C100128</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD3B457CF530A65FE5D02A3F72308338</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E9707803C2CCFA4F46D17D4BCE8554B8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
