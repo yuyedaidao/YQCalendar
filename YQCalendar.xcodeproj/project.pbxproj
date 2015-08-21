@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		21CF490A1B856BF00035CC44 /* YQCalendarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21CF49081B856BF00035CC44 /* YQCalendarCell.m */; };
-		21CF490B1B856BF00035CC44 /* YQCalendarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 21CF49091B856BF00035CC44 /* YQCalendarCell.xib */; };
 		21CF49111B85A7480035CC44 /* YQCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21CF49101B85A7480035CC44 /* YQCellModel.m */; };
 		55A95F0E1B84C3DE005DFD41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A95F0D1B84C3DE005DFD41 /* main.m */; };
 		55A95F111B84C3DE005DFD41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A95F101B84C3DE005DFD41 /* AppDelegate.m */; };
@@ -37,7 +36,6 @@
 		0BBA89EDD22D8817DA87D9B2 /* Pods-YQCalendarTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YQCalendarTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YQCalendarTests/Pods-YQCalendarTests.debug.xcconfig"; sourceTree = "<group>"; };
 		21CF49071B856BF00035CC44 /* YQCalendarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YQCalendarCell.h; sourceTree = "<group>"; };
 		21CF49081B856BF00035CC44 /* YQCalendarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YQCalendarCell.m; sourceTree = "<group>"; };
-		21CF49091B856BF00035CC44 /* YQCalendarCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YQCalendarCell.xib; sourceTree = "<group>"; };
 		21CF490E1B856D490035CC44 /* YQCalendar.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YQCalendar.pch; sourceTree = "<group>"; };
 		21CF490F1B85A7480035CC44 /* YQCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YQCellModel.h; sourceTree = "<group>"; };
 		21CF49101B85A7480035CC44 /* YQCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YQCellModel.m; sourceTree = "<group>"; };
@@ -168,7 +166,6 @@
 				55A95F381B84D1FF005DFD41 /* YQCalendarAppearence.m */,
 				21CF49071B856BF00035CC44 /* YQCalendarCell.h */,
 				21CF49081B856BF00035CC44 /* YQCalendarCell.m */,
-				21CF49091B856BF00035CC44 /* YQCalendarCell.xib */,
 				21CF490F1B85A7480035CC44 /* YQCellModel.h */,
 				21CF49101B85A7480035CC44 /* YQCellModel.m */,
 			);
@@ -271,7 +268,6 @@
 				55A95F171B84C3DE005DFD41 /* Main.storyboard in Resources */,
 				55A95F1C1B84C3DE005DFD41 /* LaunchScreen.xib in Resources */,
 				55A95F191B84C3DE005DFD41 /* Images.xcassets in Resources */,
-				21CF490B1B856BF00035CC44 /* YQCalendarCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

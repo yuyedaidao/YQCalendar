@@ -10,5 +10,25 @@
 #import "YQCellModel.h"
 
 @interface YQCalendarCell : UICollectionViewCell
+
+
 @property (nonatomic, strong) YQCellModel *model;
+/**
+ *  用于取消点击后恢复状态
+ */
+- (void)reset;
+/**
+ *  高亮当前cell
+ */
+- (void)highlight;
+/**
+ *  选中当前cell
+ */
+- (void)select;
+/**
+ *  是否在文字下显示圆点标志
+ *
+ *  @param show 
+ */
+- (void)showFlagDot:(BOOL)show;
 @end

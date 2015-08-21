@@ -11,6 +11,7 @@
 
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet YQCalendar *calendar;
 
 @end
 
@@ -26,6 +27,9 @@
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [calendar testItemsLocation];
 //    });
+}
+- (IBAction)change:(id)sender {
+    
 }
 
 - (void)didReceiveMemoryWarning {

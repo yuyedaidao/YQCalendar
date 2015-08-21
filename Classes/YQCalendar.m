@@ -21,10 +21,12 @@ static NSString *const Identifier = @"YQCalendarCell";
  *  最小时间月份的初始时间
  */
 @property (nonatomic, strong, readonly) NSDate *minBeginningDate;
-
-
+@property (nonatomic, strong, readonly) NSDate *selectedBeginningDate;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UICollectionViewFlowLayout *collectionLayout;
+
+@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+
 @end
 
 @implementation YQCalendar
@@ -72,7 +74,10 @@ static NSString *const Identifier = @"YQCalendarCell";
     self.collectionLayout.minimumInteritemSpacing = 0;
     self.collectionLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 
+    self.appearence = [[YQCalendarAppearence alloc] init];
+    
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.collectionLayout];
+    self.collectionView.backgroundColor = self.appearence.calendarBackgroundColor;
     self.collectionView.pagingEnabled = YES;
     self.collectionView.scrollsToTop = NO;
     self.collectionView.delegate = self;
@@ -80,17 +85,10 @@ static NSString *const Identifier = @"YQCalendarCell";
     self.collectionView.showsHorizontalScrollIndicator = NO;
     self.collectionView.showsVerticalScrollIndicator = NO;
     
-    [self.collectionView registerNib:[UINib nibWithNibName:Identifier bundle:nil] forCellWithReuseIdentifier:Identifier];
+    [self.collectionView registerClass:[YQCalendarCell class] forCellWithReuseIdentifier:Identifier];
     
-    self.collectionView.backgroundColor = self.appearence.calendarBackgroundColor;
     
     [self addSubview:self.collectionView];
-//    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self);
-//    }];
-    
-    //改变collectionView的位置时会触发数据的加载
-    DDLogDebug(@"sectionIndexOfCurrent = %ld",[self sectionIndexOfDate:[NSDate date]]);
 
 
 }
@@ -120,12 +118,13 @@ static NSString *const Identifier = @"YQCalendarCell";
  *  @return YQCellModel
  */
 - (YQCellModel *)cellModelForIndexPath:(NSIndexPath *)indexPath{
-    //列、排
-    NSInteger column = indexPath.item/RowCount;
-    NSInteger row = indexPath.item%RowCount;
-    NSInteger index = row*ColumnCount+column;
+
+    
     YQCellModel *model = [[YQCellModel alloc] init];
     model.indexPath = indexPath;
+    model.column = indexPath.item/RowCount;
+    model.row = indexPath.item%RowCount;
+    NSInteger index = model.row*ColumnCount+model.column;
     //确定月份的第一天
     NSDate *firstDay = [self.minBeginningDate dateByAddingMonths:indexPath.section];
     model.month = firstDay.month;
@@ -153,13 +152,10 @@ static NSString *const Identifier = @"YQCalendarCell";
         _minBeginningDate = [NSDate dateWithYear:minDate.year month:minDate.month day:1];
     }
 }
-- (YQCalendarAppearence *)appearence{
-    if(!_appearence){
-        _appearence = [[YQCalendarAppearence alloc] init];
-    }
-    return _appearence;
+- (void)setSelectedDate:(NSDate *)selectedDate{
+    _selectedDate = selectedDate;
+    _selectedBeginningDate = [NSDate dateWithYear:selectedDate.year month:selectedDate.month day:1];
 }
-
 #pragma mark collection delegate
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -185,18 +181,33 @@ static NSString *const Identifier = @"YQCalendarCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     YQCalendarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:Identifier forIndexPath:indexPath];
+    [cell showFlagDot:arc4random()%2];
     YQCellModel *model = [self cellModelForIndexPath:indexPath];
     cell.model = model;
     return cell;
 }
 
-#pragma mark test
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    YQCalendarCell *cell = (YQCalendarCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    if(cell.model.dateType == YQDateTypeToday || cell.model.dateType == YQDateTypeCurrentMoth){
+        self.selectedDate = cell.model.date;
+        self.selectedIndexPath = indexPath;
+        [cell select];
+    }else if(cell.model.dateType == YQDateTypePreMonth){
+        //往前滚动一个月
+    }else if(cell.model.dateType == YQDateTypeNextMonth){
+        //往后滚动一个月
+    }
+}
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
+    YQCalendarCell *cell = (YQCalendarCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [cell reset];
+}
 
-- (void)testItemsLocation{
-    [[self.collectionView visibleCells] enumerateObjectsUsingBlock:^(YQCalendarCell *obj, NSUInteger idx, BOOL *stop) {
-        DDLogDebug(@"obj indexPath = %@",obj.model.indexPath);
-        DDLogDebug(@"obj date day = %ld",obj.model.date.day);
-        DDLogDebug(@"obj location = %@",NSStringFromCGRect(obj.frame));
-    }];
+#pragma mark public
+- (void)changeModel{
+    //如果当前月份有选中时间滚动到这个时间所在的行
+    //如果当前月份有今天就滚动到今天所在的行
+    //如果什么都没有就滚动到第一行
 }
 @end

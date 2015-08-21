@@ -19,6 +19,15 @@ typedef NS_ENUM(NSUInteger, YQDateType) {
 
 @property (nonatomic, strong) NSDate *date;
 @property (nonatomic, strong) NSIndexPath *indexPath;
+/**
+ *  cell在当前月份实际的列值
+ */
+@property (nonatomic, assign) NSInteger column;
+/**
+ *  cell在当前月份实际的行值
+ */
+@property (nonatomic, assign) NSInteger row;
+
 @property (nonatomic, assign) NSInteger month;
 @property (nonatomic, assign, readonly) YQDateType dateType;
 

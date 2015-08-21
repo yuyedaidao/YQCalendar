@@ -18,6 +18,12 @@
 
 @end
 
+
+typedef NS_ENUM(NSUInteger, YQCalendarModel) {
+    YQCalendarModelWeek,
+    YQCalendarModelMonth
+};
+
 @interface YQCalendar : UIView
 
 - (instancetype)init;
@@ -28,10 +34,13 @@
 @property (nonatomic, strong) YQCalendarAppearence *appearence;
 @property (nonatomic, weak) id<YQCalendarDelegate> delegate;
 
+@property (nonatomic, strong) NSDate *selectedDate;
 @property (nonatomic, strong) IBInspectable NSDate *minDate;
 @property (nonatomic, strong) IBInspectable NSDate *maxDate;
 @property (nonatomic, assign) IBInspectable BOOL firstIsSunday;
 
-- (void)testItemsLocation;
+@property (nonatomic, assign) YQCalendarModel model;
+
+- (void)changeModel;
 
 @end
