@@ -75,7 +75,7 @@ static NSString *const Identifier = @"YQCalendarCell";
     self.collectionLayout.minimumInteritemSpacing = 0;
     self.collectionLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 
-    self.appearence = [[YQCalendarAppearence alloc] init];
+    _appearence = [[YQCalendarAppearence alloc] init];
     
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.collectionLayout];
     self.collectionView.backgroundColor = self.appearence.calendarBackgroundColor;
@@ -131,7 +131,6 @@ static NSString *const Identifier = @"YQCalendarCell";
  */
 - (YQCellModel *)cellModelForIndexPath:(NSIndexPath *)indexPath{
 
-    
     YQCellModel *model = [[YQCellModel alloc] init];
     model.indexPath = indexPath;
     model.column = indexPath.item/RowCount;
@@ -150,7 +149,8 @@ static NSString *const Identifier = @"YQCalendarCell";
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    self.headerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.collectionView.bounds), [YQCalendarAppearence share].headerHeight);
+    
+    self.headerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), [YQCalendarAppearence share].headerHeight);
     self.collectionView.frame = CGRectMake(0, CGRectGetMaxY(self.headerView.frame),CGRectGetWidth(self.bounds) , CGRectGetHeight(self.bounds)-[YQCalendarAppearence share].headerHeight);
     CGFloat width = CGRectGetWidth(self.collectionView.bounds)/ColumnCount;
     CGFloat height = CGRectGetHeight(self.collectionView.bounds)/RowCount;
@@ -158,7 +158,10 @@ static NSString *const Identifier = @"YQCalendarCell";
     [self.collectionView setContentOffset:CGPointMake(CGRectGetWidth(self.collectionView.bounds)*[self sectionIndexOfDate:[NSDate date]], 0) animated:NO];
 }
 
-
+//- (void)setAppearence:(YQCalendarAppearence *)appearence{
+//    _appearence = appearence;
+//    self.collectionView
+//}
 - (void)setMinDate:(NSDate *)minDate{
     if(_minDate != minDate){
         _minDate = minDate;

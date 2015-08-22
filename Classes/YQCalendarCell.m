@@ -90,6 +90,7 @@ static NSString *const AnimationKey = @"CircleScaleKey";
     CGFloat side = MIN(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))*[YQCalendarAppearence share].cellTextCircleScale;
     self.textCircleLayer.frame = self.bounds;
     self.textCircleLayer.path = [UIBezierPath bezierPathWithArcCenter:center radius:side/2 startAngle:0 endAngle:2*M_PI clockwise:YES].CGPath;
+    DDLogDebug(@"调整");
 }
 
 - (void)prepareForReuse{
@@ -102,8 +103,10 @@ static NSString *const AnimationKey = @"CircleScaleKey";
     if(_model != model){
         _model = model;
     }
-    //为了显示信息保证最新，不能在条件判断内执行
+    //1.为了显示信息保证最新，不能在条件判断内执行
+    //2.添加文字之后是不会调用sizeToFit的，导致复用情况下有些label显示不全文字
     self.dateLabel.text = [@(self.model.date.day) stringValue];
+    [self.dateLabel sizeToFit];
     [CATransaction setDisableActions:NO];
     [self reset];
 }
