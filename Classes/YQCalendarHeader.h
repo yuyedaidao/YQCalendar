@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface YQCalendarHeader : UIView
-
+@property (nonatomic, strong) UILabel *monthLabel;
 @end

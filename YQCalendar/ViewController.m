@@ -20,7 +20,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
+    [super viewDidLoad];
+    //test layer action when outside of animation block
+    NSLog(@"Outside: %@", [self.view actionForLayer:self.view.layer forKey:@"backgroundColor"]);
+    //begin animation block
+    [UIView beginAnimations:nil context:nil];
+    //test layer action when inside of animation block
+    NSLog(@"Inside: %@", [self.view actionForLayer:self.view.layer forKey:@"backgroundColor"]);
+    //end animation block
+    [UIView commitAnimations];
 //    YQCalendar *calendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, 0, 40*7, 40*5)];
 //    [self.view addSubview:calendar];
 //    

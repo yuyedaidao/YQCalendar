@@ -17,10 +17,13 @@ static NSInteger const ColumnCount = 7;
 @property (nonatomic, strong) UIColor *calendarBackgroundColor;
 @property (nonatomic, assign) BOOL firstDayIsSunday;
 
-@property (nonatomic, strong) UIColor *headerTextColor;
-@property (nonatomic, strong) UIFont *headerFont;
+@property (nonatomic, strong) UIColor *headerWeekTextColor;
+@property (nonatomic, strong) UIColor *headerMonthTextColor;
+@property (nonatomic, strong) UIFont *headerWeekFont;
+@property (nonatomic, strong) UIFont *headerMonthFont;
 @property (nonatomic, strong) UIColor *headerBackgroundColor;
 @property (nonatomic, assign) CGFloat headerHeight;
+@property (nonatomic, assign) CGFloat headerBottomPadding;
 
 @property (nonatomic, strong) UIColor *cellTextNormalColor;
 @property (nonatomic, strong) UIColor *cellTextTodayColor;
@@ -49,5 +52,12 @@ static NSInteger const ColumnCount = 7;
  *  @return
  */
 + (instancetype)share;
+
+
+///**
+// *  可以通过这两个属性对YQCalendar做一些操作，比如布局
+// */
+//@property (nonatomic, weak, readonly) UIView *headerWeekView;
+//@property (nonatomic, weak, readonly) UIView *headerMonthView;
 
 @end

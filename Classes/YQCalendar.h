@@ -9,13 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "YQCalendarAppearence.h"
 
-@protocol YQCalendarDataSource <NSObject>
-
-@end
+@class YQCalendar;
 
 @protocol YQCalendarDelegate <NSObject>
-
-
+- (void)calendar:(YQCalendar *)calendar didSelectDate:(NSDate *)date;
 @end
 
 

@@ -11,6 +11,7 @@
 #import <DateTools.h>
 #import "YQCalendarCell.h"
 #import "YQCalendarHeader.h"
+#import <ReactiveCocoa.h>
 
 static NSString *const Identifier = @"YQCalendarCell";
 
@@ -25,6 +26,7 @@ static NSString *const Identifier = @"YQCalendarCell";
 @property (nonatomic, strong) UICollectionViewFlowLayout *collectionLayout;
 @property (nonatomic, strong) YQCalendarHeader *headerView;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+@property (nonatomic, strong) NSDate *currentMonthBeginningDate;
 
 @end
 
@@ -92,9 +94,18 @@ static NSString *const Identifier = @"YQCalendarCell";
     //header
     _headerView = [[YQCalendarHeader alloc] init];
     [self addSubview:self.headerView];
+    
+    RAC(self.headerView,monthLabel.text) = [RACObserve(self, currentMonthBeginningDate) map:^id(NSDate *value) {
+        return [value formattedDateWithFormat:@"yyyy-MM"];
+    }];
+    
+    NSDate *date = [NSDate date];
+    self.currentMonthBeginningDate = [NSDate dateWithYear:date.year month:date.month day:1];
 }
 
-
+- (void)setCurrentMonthBegginningDateWithOffset:(CGFloat)offset{
+    self.currentMonthBeginningDate = [self.minBeginningDate dateByAddingMonths:offset/CGRectGetWidth(self.collectionView.bounds)];
+}
 - (NSInteger)sectionIndexOfDate:(NSDate *)date{
     if([date isLaterThan:self.minDate]){
         //同一年
@@ -206,11 +217,21 @@ static NSString *const Identifier = @"YQCalendarCell";
     [cell reset];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    DDLogInfo(@"scroll x = %lf",scrollView.contentOffset.x);
+//}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    [self setCurrentMonthBegginningDateWithOffset:scrollView.contentOffset.x];
+}
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if(!decelerate){
+        [self setCurrentMonthBegginningDateWithOffset:scrollView.contentOffset.x];
+    }
 }
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
     DDLogInfo(@"scroll animation end");
+    [self setCurrentMonthBegginningDateWithOffset:scrollView.contentOffset.x];
+    
 }
 
 #pragma mark public

@@ -93,6 +93,7 @@ static NSString *const AnimationKey = @"CircleScaleKey";
 }
 
 - (void)prepareForReuse{
+    [CATransaction setDisableActions:YES];//这样可以禁止隐式动画，在滑动不会出现影子
     self.textCircleLayer.hidden = YES;
     self.flagDot.hidden = YES;
 }
@@ -103,6 +104,7 @@ static NSString *const AnimationKey = @"CircleScaleKey";
     }
     //为了显示信息保证最新，不能在条件判断内执行
     self.dateLabel.text = [@(self.model.date.day) stringValue];
+    [CATransaction setDisableActions:NO];
     [self reset];
 }
 

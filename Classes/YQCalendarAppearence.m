@@ -17,10 +17,12 @@ static YQCalendarAppearence *_yqAppearence = nil;
         _calendarBackgroundColor = [UIColor groupTableViewBackgroundColor];
         _firstDayIsSunday = NO;
         
-        _headerTextColor = [UIColor whiteColor];
-        _headerFont = [UIFont systemFontOfSize:14];
+        _headerWeekTextColor = [UIColor whiteColor];
+        _headerWeekFont = [UIFont systemFontOfSize:14];
+        _headerMonthTextColor = [UIColor whiteColor];
+        _headerMonthFont = [UIFont systemFontOfSize:15];
         _headerBackgroundColor = _calendarBackgroundColor;
-        _headerHeight = 80.0f;
+        _headerHeight = 50.0f;
         
         _cellTextNormalColor = [UIColor whiteColor];
         _cellTextTodayColor = [UIColor blueColor];

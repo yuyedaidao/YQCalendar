@@ -34,35 +34,45 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>ReactiveCocoa.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>01066063172A1FB1B3A3588F8F12DAB5</key>
+		<key>10CD8BC39DB5CF0F0D7DFC1CF73DD32D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>01CB2A2899C298A267BD3EE702F810A3</key>
+		<key>407FA939A8CBFAB7E20EC3017F98FA29</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>196510D779B6BC81D31AC93066C8F55A</key>
+		<key>6951DA9871DA259A9AAA6EFC68AEF8EB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2A29AFCF6B0EAE4E78F1FA528E1DDBB2</key>
+		<key>7A442E0AAD626C12CAE01858C2862E18</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2C4248E558C52A3B657384E2F8926FAA</key>
+		<key>8FDA75D1480AB02E80102ED1EE03297E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>C68DA349DF1F098DD663F0666C100128</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C729C2C86E14933DD4A6240C9D77398C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
