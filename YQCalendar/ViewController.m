@@ -24,7 +24,7 @@
     YQCalendar *calendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, 0, 50*7, 50*7)];
     calendar.center = self.view.center;
     calendar.backgroundColor = [UIColor orangeColor];
-    calendar.appearence.headerWeekTextColor = [UIColor greenColor];
+//    calendar.appearence.headerWeekTextColor = [UIColor greenColor];
     [self.view addSubview:calendar];
     
   

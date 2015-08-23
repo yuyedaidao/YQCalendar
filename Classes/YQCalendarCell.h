@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "YQCellModel.h"
+#import "YQCalendarAppearence.h"
+
 
 @interface YQCalendarCell : UICollectionViewCell
 

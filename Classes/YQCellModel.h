@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "YQCalendarAppearence.h"
 
 typedef NS_ENUM(NSUInteger, YQDateType) {
     YQDateTypeCurrentMoth = 0,
@@ -17,6 +18,7 @@ typedef NS_ENUM(NSUInteger, YQDateType) {
 
 @interface YQCellModel : NSObject
 
+@property (nonatomic, assign) YQCalendarMode cellMode;
 @property (nonatomic, strong) NSDate *date;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 /**
@@ -30,5 +32,6 @@ typedef NS_ENUM(NSUInteger, YQDateType) {
 
 @property (nonatomic, assign) NSInteger month;
 @property (nonatomic, assign, readonly) YQDateType dateType;
+
 
 @end

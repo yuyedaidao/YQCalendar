@@ -16,11 +16,6 @@
 @end
 
 
-typedef NS_ENUM(NSUInteger, YQCalendarModel) {
-    YQCalendarModelWeek,
-    YQCalendarModelMonth
-};
-
 @interface YQCalendar : UIView
 
 - (instancetype)init;
@@ -35,7 +30,7 @@ typedef NS_ENUM(NSUInteger, YQCalendarModel) {
 @property (nonatomic, strong) IBInspectable NSDate *minDate;
 @property (nonatomic, strong) IBInspectable NSDate *maxDate;
 
-@property (nonatomic, assign) YQCalendarModel model;
+@property (nonatomic, assign) YQCalendarMode mode;
 
 - (void)changeModel;
 

@@ -9,8 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-static NSInteger const RowCount = 6;
+static NSInteger const RowCountMonthMode = 6;
 static NSInteger const ColumnCount = 7;
+static NSInteger const RowCountWeekMode = 1;
+
+
+typedef NS_ENUM(NSUInteger, YQCalendarMode) {
+    YQCalendarModeWeek,
+    YQCalendarModeMonth,
+};
 
 @interface YQCalendarAppearence : NSObject
 
@@ -45,6 +52,9 @@ static NSInteger const ColumnCount = 7;
  */
 @property (nonatomic, assign) CGFloat cellFlagDotDiameter;
 @property (nonatomic, assign) CGFloat cellFlagDotTextBottomSpace;
+
+
+//@property (nonatomic, assign) YQCalendarMode *mode;
 
 /**
  *  这并不是真正的单例，而是帮助cell快速访问已经生成的实例，所以不能通过这个方法来创建实例

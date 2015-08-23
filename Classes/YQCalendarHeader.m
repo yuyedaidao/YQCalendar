@@ -12,7 +12,7 @@
 
 @interface YQCalendarHeader()
 @property (nonatomic, strong) NSMutableArray *weekLabelArray;
-@property (nonatomic, strong) UIButton *todayButton;
+//@property (nonatomic, strong) UIButton *todayButton;
 @end
 
 @implementation YQCalendarHeader
@@ -69,6 +69,7 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
+    
     CGFloat height = CGRectGetHeight(self.bounds)/4;
     [self.monthLabel sizeToFit];
     self.monthLabel.center = CGPointMake(CGRectGetMidX(self.bounds), height);

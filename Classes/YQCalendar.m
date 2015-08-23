@@ -66,6 +66,8 @@ static NSString *const Identifier = @"YQCalendarCell";
 
 - (void)prepare{
     
+    self.mode = YQCalendarModeWeek;
+    
     self.maxDate = [NSDate dateWithYear:2099 month:12 day:31];
     self.minDate = [NSDate dateWithYear:1970 month:1 day:1];
     
@@ -104,7 +106,11 @@ static NSString *const Identifier = @"YQCalendarCell";
 }
 
 - (void)setCurrentMonthBegginningDateWithOffset:(CGFloat)offset{
-    self.currentMonthBeginningDate = [self.minBeginningDate dateByAddingMonths:offset/CGRectGetWidth(self.collectionView.bounds)];
+    if(self.mode == YQCalendarModeMonth){
+        self.currentMonthBeginningDate = [self.minBeginningDate dateByAddingMonths:offset/CGRectGetWidth(self.collectionView.bounds)];
+    }else{
+        //TODO:这里应该计算本周第一天的时间
+    }
 }
 - (NSInteger)sectionIndexOfDate:(NSDate *)date{
     if([date isLaterThan:self.minDate]){
@@ -133,15 +139,22 @@ static NSString *const Identifier = @"YQCalendarCell";
 
     YQCellModel *model = [[YQCellModel alloc] init];
     model.indexPath = indexPath;
-    model.column = indexPath.item/RowCount;
-    model.row = indexPath.item%RowCount;
-    NSInteger index = model.row*ColumnCount+model.column;
-    //确定月份的第一天
-    NSDate *firstDay = [self.minBeginningDate dateByAddingMonths:indexPath.section];
-    model.month = firstDay.month;
-    //星期几
-    NSInteger week = firstDay.weekday;//如果星期天是一周的第一天，那么这个月的第一天就在indexPath.row为week-1的位置上
-    model.date = [firstDay dateByAddingDays:index-week+([YQCalendarAppearence share].firstDayIsSunday?1:2)];
+    model.cellMode = self.mode;
+    
+    if(self.mode == YQCalendarModeMonth){
+        model.column = indexPath.item/RowCountMonthMode;
+        model.row = indexPath.item%RowCountMonthMode;
+        NSInteger index = model.row*ColumnCount+model.column;
+        //确定月份的第一天
+        NSDate *firstDay = [self.minBeginningDate dateByAddingMonths:indexPath.section];
+        model.month = firstDay.month;
+        //星期几
+        NSInteger week = firstDay.weekday;//如果星期天是一周的第一天，那么这个月的第一天就在indexPath.row为week-1的位置上
+        model.date = [firstDay dateByAddingDays:index-week+([YQCalendarAppearence share].firstDayIsSunday?1:2)];
+    }else if(self.mode == YQCalendarModeWeek){
+        model.date = [self.minBeginningDate dateByAddingDays:indexPath.item];
+    }
+    
     return model;
 }
 
@@ -153,9 +166,13 @@ static NSString *const Identifier = @"YQCalendarCell";
     self.headerView.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), [YQCalendarAppearence share].headerHeight);
     self.collectionView.frame = CGRectMake(0, CGRectGetMaxY(self.headerView.frame),CGRectGetWidth(self.bounds) , CGRectGetHeight(self.bounds)-[YQCalendarAppearence share].headerHeight);
     CGFloat width = CGRectGetWidth(self.collectionView.bounds)/ColumnCount;
-    CGFloat height = CGRectGetHeight(self.collectionView.bounds)/RowCount;
+    CGFloat height = CGRectGetHeight(self.collectionView.bounds)/RowCountMonthMode;
     self.collectionLayout.itemSize = CGSizeMake(width, height);
-    [self.collectionView setContentOffset:CGPointMake(CGRectGetWidth(self.collectionView.bounds)*[self sectionIndexOfDate:[NSDate date]], 0) animated:NO];
+    if(self.mode == YQCalendarModeMonth){
+        [self.collectionView setContentOffset:CGPointMake(CGRectGetWidth(self.collectionView.bounds)*[self sectionIndexOfDate:[NSDate date]], 0) animated:NO];
+    }else if(self.mode == YQCalendarModeWeek){
+        self.collectionView.contentOffset =CGPointMake([[NSDate date] daysLaterThan:self.minBeginningDate], 0);
+    }
 }
 
 //- (void)setAppearence:(YQCalendarAppearence *)appearence{
@@ -175,24 +192,36 @@ static NSString *const Identifier = @"YQCalendarCell";
 #pragma mark collection delegate
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    //返回一共有多少需要多少个月
     NSAssert([self.maxDate isLaterThan:self.minDate], @"最大最小日期设定不合适");
-    //同一年
-    if(self.maxDate.year == self.minDate.year){
-        return self.maxDate.month-self.minDate.month+1;
-    }
-    //不同年 且最大日期月份大于最小日期月份
-    if(self.maxDate.month >= self.minDate.month){//不同年 且最大日期月份大于最小日期月份
-        return (self.maxDate.year-self.minDate.year)*12+(self.maxDate.month-self.minDate.month+1);
-    }else{//不同年 且最大日期月份小于最小日期月份
-        return (self.maxDate.year-self.minDate.year)*12-(self.minDate.month-self.maxDate.month-1);
+    
+    if(self.mode == YQCalendarModeMonth){
+        //返回一共有多少需要多少个月
+        
+        //同一年
+        if(self.maxDate.year == self.minDate.year){
+            return self.maxDate.month-self.minDate.month+1;
+        }
+        //不同年 且最大日期月份大于最小日期月份
+        if(self.maxDate.month >= self.minDate.month){//不同年 且最大日期月份大于最小日期月份
+            return (self.maxDate.year-self.minDate.year)*12+(self.maxDate.month-self.minDate.month+1);
+        }else{//不同年 且最大日期月份小于最小日期月份
+            return (self.maxDate.year-self.minDate.year)*12-(self.minDate.month-self.maxDate.month-1);
+        }
+    }else if(self.mode == YQCalendarModeWeek){
+        return 1;
     }
     
     return 0;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return ColumnCount*RowCount;
+    if(self.mode == YQCalendarModeMonth){
+        return ColumnCount*RowCountMonthMode;
+    }else if(self.mode == YQCalendarModeWeek){
+//        return ColumnCount;
+        return [self.maxDate daysLaterThan:self.minBeginningDate];
+    }
+    return 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -232,7 +261,6 @@ static NSString *const Identifier = @"YQCalendarCell";
     }
 }
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
-    DDLogInfo(@"scroll animation end");
     [self setCurrentMonthBegginningDateWithOffset:scrollView.contentOffset.x];
     
 }

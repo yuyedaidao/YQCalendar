@@ -14,17 +14,19 @@
 - (void)setDate:(NSDate *)date{
     if(_date != date){
         _date = date;
-        if(self.month == date.month){
-            if(date.isToday){
-                _dateType = YQDateTypeToday;
+        if(self.cellMode == YQCalendarModeMonth){
+            if(self.month == date.month){
+                if(date.isToday){
+                    _dateType = YQDateTypeToday;
+                }else{
+                    _dateType = YQDateTypeCurrentMoth;
+                }
             }else{
-                _dateType = YQDateTypeCurrentMoth;
-            }
-        }else{
-            if(self.month > date.month){
-                _dateType = YQDateTypeNextMonth;
-            }else{
-                _dateType = YQDateTypePreMonth;
+                if(self.month > date.month){
+                    _dateType = YQDateTypeNextMonth;
+                }else{
+                    _dateType = YQDateTypePreMonth;
+                }
             }
         }
     }
