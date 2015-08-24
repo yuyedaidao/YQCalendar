@@ -13,6 +13,12 @@ static NSInteger const RowCountMonthMode = 6;
 static NSInteger const ColumnCount = 7;
 static NSInteger const RowCountWeekMode = 1;
 
+static CGFloat const YQAnmiationDuration = 0.3f;
+
+
+UIKIT_STATIC_INLINE CGFloat NavHeight(UIViewController *vc){
+    return vc.navigationController.navigationBar.frame.size.height+[UIApplication sharedApplication].statusBarFrame.size.height;
+}
 
 typedef NS_ENUM(NSUInteger, YQCalendarMode) {
     YQCalendarModeWeek,
@@ -52,7 +58,10 @@ typedef NS_ENUM(NSUInteger, YQCalendarMode) {
  */
 @property (nonatomic, assign) CGFloat cellFlagDotDiameter;
 @property (nonatomic, assign) CGFloat cellFlagDotTextBottomSpace;
-
+/**
+ *  触发日历变换的临界值 正值 在于scorllView的contentOffset做运算是需要注意
+ */
+@property (nonatomic, assign) CGFloat criticalOffset;
 
 //@property (nonatomic, assign) YQCalendarMode *mode;
 

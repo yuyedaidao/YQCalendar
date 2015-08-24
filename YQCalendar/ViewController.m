@@ -11,7 +11,7 @@
 
 
 @interface ViewController ()
-@property (weak, nonatomic) IBOutlet YQCalendar *calendar;
+@property (strong, nonatomic) IBOutlet YQCalendar *calendar;
 
 @end
 
@@ -20,12 +20,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.calendar = ({
+        YQCalendar *calendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, 0, 50*7, 50*2)];
+        calendar.center = CGPointMake(self.view.center.x, 150);
+        calendar.backgroundColor = [UIColor orangeColor];
+        //    calendar.appearence.headerWeekTextColor = [UIColor greenColor];
+        [self.view addSubview:calendar];
+        calendar;
     
-    YQCalendar *calendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, 0, 50*7, 50*7)];
-    calendar.center = self.view.center;
-    calendar.backgroundColor = [UIColor orangeColor];
-//    calendar.appearence.headerWeekTextColor = [UIColor greenColor];
-    [self.view addSubview:calendar];
+    });
+    
     
   
 //
@@ -34,7 +38,7 @@
 //    });
 }
 - (IBAction)change:(id)sender {
-    
+    [self.calendar changeModel];
 }
 
 - (void)didReceiveMemoryWarning {

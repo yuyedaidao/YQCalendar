@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "YQCalendarAppearence.h"
+#import "YQCalendarHeader.h"
+
 
 @class YQCalendar;
 
@@ -16,13 +18,20 @@
 @end
 
 
+@interface UIScrollView (YQCalendar)
+- (void)addCalendar:(YQCalendar *)calendar;
+@end
+
 @interface YQCalendar : UIView
 
 - (instancetype)init;
 - (instancetype)initWithFrame:(CGRect)frame;
 - (instancetype)initWithAppearence:(YQCalendarAppearence *)appearence;
 - (instancetype)initWithFrame:(CGRect)frame appearence:(YQCalendarAppearence *)appearence;
+- (instancetype)initWithFrame:(CGRect)frame appearence:(YQCalendarAppearence *)appearence mode:(YQCalendarMode)mode;
+- (instancetype)initWithFrame:(CGRect)frame appearence:(YQCalendarAppearence *)appearence mode:(YQCalendarMode)mode hasNavigation:(BOOL)hasNav;
 
+@property (nonatomic, strong) YQCalendarHeader *headerView;
 @property (nonatomic, strong) YQCalendarAppearence *appearence;
 @property (nonatomic, weak) id<YQCalendarDelegate> delegate;
 
@@ -30,8 +39,9 @@
 @property (nonatomic, strong) IBInspectable NSDate *minDate;
 @property (nonatomic, strong) IBInspectable NSDate *maxDate;
 
+@property (nonatomic, assign) BOOL hasNavigation;
 @property (nonatomic, assign) YQCalendarMode mode;
-
+@property (nonatomic, assign) CGFloat targetRowOriginY;
 - (void)changeModel;
 
 @end

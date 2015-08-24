@@ -17,6 +17,8 @@ static YQCalendarAppearence *_yqAppearence = nil;
         _calendarBackgroundColor = [UIColor groupTableViewBackgroundColor];
         _firstDayIsSunday = YES;
         
+        _criticalOffset = 100.0f;
+        
         _headerWeekTextColor = [UIColor whiteColor];
         _headerWeekFont = [UIFont systemFontOfSize:14];
         _headerMonthTextColor = [UIColor greenColor];

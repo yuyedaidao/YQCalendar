@@ -39,7 +39,7 @@ static NSString *const AnimationKey = @"CircleScaleKey";
 
 #pragma mark self handler
 - (void)prepare{
-    
+    self.backgroundColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];
     _textCircleLayer = [CAShapeLayer layer];
     self.textCircleLayer.contentsScale = [UIScreen mainScreen].scale;
     self.textCircleLayer.rasterizationScale = 2.0 * [UIScreen mainScreen].scale;
@@ -90,7 +90,6 @@ static NSString *const AnimationKey = @"CircleScaleKey";
     CGFloat side = MIN(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))*[YQCalendarAppearence share].cellTextCircleScale;
     self.textCircleLayer.frame = self.bounds;
     self.textCircleLayer.path = [UIBezierPath bezierPathWithArcCenter:center radius:side/2 startAngle:0 endAngle:2*M_PI clockwise:YES].CGPath;
-    DDLogDebug(@"调整");
 }
 
 - (void)prepareForReuse{
@@ -107,6 +106,8 @@ static NSString *const AnimationKey = @"CircleScaleKey";
     //2.添加文字之后是不会调用sizeToFit的，导致复用情况下有些label显示不全文字
     self.dateLabel.text = [@(self.model.date.day) stringValue];
     [self.dateLabel sizeToFit];
+    CGPoint center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+    self.dateLabel.center = center;
     [CATransaction setDisableActions:NO];
     [self reset];
 }
