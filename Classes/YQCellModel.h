@@ -10,7 +10,8 @@
 #import "YQCalendarAppearence.h"
 
 typedef NS_ENUM(NSUInteger, YQDateType) {
-    YQDateTypeCurrentMoth = 0,
+    YQDateTypeDefault = 0,
+    YQDateTypeCurrentMoth = 1,
     YQDateTypePreMonth, //previous
     YQDateTypeToday,
     YQDateTypeNextMonth,

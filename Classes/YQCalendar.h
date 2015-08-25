@@ -15,6 +15,13 @@
 
 @protocol YQCalendarDelegate <NSObject>
 - (void)calendar:(YQCalendar *)calendar didSelectDate:(NSDate *)date;
+/**
+ *  月视图改变后调用此方法
+ *
+ *  @param calendar
+ *  @param date     当前月的初始时间
+ */
+- (void)calendar:(YQCalendar *)calendar didChangeMonth:(NSDate *)date;
 @end
 
 
@@ -42,6 +49,9 @@
 @property (nonatomic, assign) BOOL hasNavigation;
 @property (nonatomic, assign) YQCalendarMode mode;
 @property (nonatomic, assign) CGFloat targetRowOriginY;
+
+- (void)scrollToDate:(NSDate *)date;
+- (void)selectCellByDate:(NSDate *)date;
 - (void)changeModel;
 
 @end

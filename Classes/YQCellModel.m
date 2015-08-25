@@ -28,6 +28,8 @@
                     _dateType = YQDateTypePreMonth;
                 }
             }
+        }else if(self.cellMode == YQCalendarModeWeek){
+            _dateType = date.isToday ? YQDateTypeToday:YQDateTypeDefault;
         }
     }
 }

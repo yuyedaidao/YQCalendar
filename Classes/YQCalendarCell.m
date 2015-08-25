@@ -39,7 +39,6 @@ static NSString *const AnimationKey = @"CircleScaleKey";
 
 #pragma mark self handler
 - (void)prepare{
-    self.backgroundColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];
     _textCircleLayer = [CAShapeLayer layer];
     self.textCircleLayer.contentsScale = [UIScreen mainScreen].scale;
     self.textCircleLayer.rasterizationScale = 2.0 * [UIScreen mainScreen].scale;
@@ -137,6 +136,12 @@ static NSString *const AnimationKey = @"CircleScaleKey";
         case YQDateTypeNextMonth:{
             self.textCircleLayer.hidden = YES;
             self.dateLabel.textColor = [YQCalendarAppearence share].cellTextOtherMonthColor;
+            self.flagDot.backgroundColor = [YQCalendarAppearence share].cellFlagDotNormalColor;
+        }
+            break;
+        case YQDateTypeDefault:{
+            self.textCircleLayer.hidden = YES;
+            self.dateLabel.textColor = [YQCalendarAppearence share].cellTextNormalColor;
             self.flagDot.backgroundColor = [YQCalendarAppearence share].cellFlagDotNormalColor;
         }
             break;

@@ -8,9 +8,18 @@
 
 #import "CalendarViewController.h"
 #import "YQCalendar.h"
-@interface CalendarViewController () <UITableViewDelegate,UITableViewDataSource>
+
+static CGFloat const RowHeight = 50.0f;
+
+@interface CalendarViewController () <UITableViewDelegate,UITableViewDataSource,YQCalendarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (nonatomic, strong) YQCalendar *monthCalendar;
+@property (nonatomic, strong) YQCalendar *weekCalendar;
+@property (nonatomic, strong) YQCalendarHeader *calendarHeader;
+
+@property (assign, nonatomic) CGFloat criticalOriginY;
+@property (assign, nonatomic) BOOL expanded;
 @end
 
 @implementation CalendarViewController
@@ -18,26 +27,60 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    DDLogDebug(@"calendar view = %@",NSStringFromCGRect(self.view.frame));
-//    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.view.frame = [UIScreen mainScreen].bounds;
+
+    self.expanded = YES;
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     self.tableView.frame = self.view.bounds;
-    YQCalendar *calendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, 50*6)];
-    [self.tableView addCalendar:calendar];
     
-    YQCalendarHeader *header = [[YQCalendarHeader alloc] initWithFrame:CGRectMake(0,self.automaticallyAdjustsScrollViewInsets? NavHeight(self):0, calendar.bounds.size.width, [YQCalendarAppearence share].headerHeight)];
-    header.backgroundColor = [UIColor orangeColor];
-//    self.tableView.tableHeaderView = header;
-    [self.view addSubview:header];
-    YQCalendar *weekCalendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(header.frame)+50*5, self.tableView.bounds.size.width, 50) appearence:nil mode:YQCalendarModeWeek];
-    [self.view addSubview:weekCalendar];
+    self.monthCalendar = ({
+        YQCalendar *calendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, RowHeight*RowCountMonthMode)];
+        [self.tableView addCalendar:calendar];
+        calendar.delegate = self;
+        calendar;
+    });
+    
+    self.calendarHeader = ({
+        YQCalendarHeader *header = [[YQCalendarHeader alloc] initWithFrame:CGRectMake(0,self.automaticallyAdjustsScrollViewInsets? NavHeight(self):0, self.monthCalendar.bounds.size.width, [YQCalendarAppearence share].headerHeight)];
+        header.backgroundColor = [UIColor orangeColor];
+        [self.view addSubview:header];
+        self.monthCalendar.headerView = header;
+        header;
+    });
+    self.weekCalendar = ({
+        YQCalendar *weekCalendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.calendarHeader.frame), self.tableView.bounds.size.width, RowHeight) appearence:nil mode:YQCalendarModeWeek];
+        [self.view addSubview:weekCalendar];
+        weekCalendar.delegate = self;
+        self.weekCalendar.hidden = YES;
+        weekCalendar;
+    });
+    [self.monthCalendar scrollToDate:[NSDate date]];
+    [self.weekCalendar scrollToDate:[NSDate date]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+#pragma mark yqcalendar
+- (void)calendar:(YQCalendar *)calendar didSelectDate:(NSDate *)date{
+    if(calendar == self.monthCalendar){
+        [self.weekCalendar selectCellByDate:date];
+        [self.weekCalendar scrollToDate:date];
+    }else{
+        [self.monthCalendar selectCellByDate:date];
+        [self.monthCalendar scrollToDate:date];
+    }
+}
+- (void)calendar:(YQCalendar *)calendar didChangeMonth:(NSDate *)date{
+    if(calendar == self.monthCalendar){
+        [self.weekCalendar scrollToDate:date];
+    }else if(calendar == self.weekCalendar){
+    
+    }
+}
 
+#pragma mark table
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
 
     return 100;
@@ -48,14 +91,29 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
-    
+    cell.textLabel.text = [@(indexPath.row) stringValue];
     return cell;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
+    //如果目标行到了目标位置，周视图日历显示
+    if(scrollView.contentOffset.y > self.criticalOriginY){
+        self.weekCalendar.hidden = NO;
+    }else{
+        if(!self.weekCalendar.isHidden){
+            self.weekCalendar.hidden = YES;
+        }
+    }
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    if(self.weekCalendar.hidden){
+        self.criticalOriginY = self.monthCalendar.targetRowOriginY+CGRectGetMinY(self.monthCalendar.frame)-NavHeight(self);
+    }
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+
+}
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     
 }
 /*
