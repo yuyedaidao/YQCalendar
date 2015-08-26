@@ -22,7 +22,6 @@ static void *ObserverContextScrollView;
 - (void)addCalendar:(YQCalendar *)calendar{
     if(calendar){
         calendar.frame = CGRectOffset(calendar.frame, 0, -CGRectGetHeight(calendar.bounds)+self.contentInset.top);
-        NSLog(@"calendar frame  = %@",NSStringFromCGRect(calendar.frame));
         if(calendar.mode == YQCalendarModeMonth){
             self.contentInset = UIEdgeInsetsMake(self.contentInset.top+CGRectGetHeight(calendar.bounds)+[YQCalendarAppearence share].headerHeight, 0, 0, 0);
             NSLog(@"calendar inset = %@",NSStringFromUIEdgeInsets(self.contentInset));

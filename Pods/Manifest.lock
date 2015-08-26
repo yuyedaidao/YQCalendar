@@ -10,6 +10,7 @@ PODS:
   - DateTools (1.6.1)
   - Kiwi (2.4.0)
   - Masonry (0.6.2)
+  - pop (1.0.7)
   - ReactiveCocoa (2.5):
     - ReactiveCocoa/UI (= 2.5)
   - ReactiveCocoa/Core (2.5):
@@ -23,6 +24,7 @@ DEPENDENCIES:
   - DateTools (~> 1.6.1)
   - Kiwi
   - Masonry (~> 0.6.2)
+  - pop
   - ReactiveCocoa
 
 SPEC CHECKSUMS:
@@ -30,6 +32,7 @@ SPEC CHECKSUMS:
   DateTools: 9bcc89e4f2f9004d8a7a2bd1b49269cf78968e65
   Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
   Masonry: 362e8a1cc0beada4a4c4832d5e863da2a51533be
+  pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
 
 COCOAPODS: 0.38.2
