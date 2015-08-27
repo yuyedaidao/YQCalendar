@@ -313,7 +313,6 @@ static void *ObserverContextScrollView;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     YQCalendarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:Identifier forIndexPath:indexPath];
-//    [cell showFlagDot:arc4random()%2];
     
     YQCellModel *model = [self cellModelForIndexPath:indexPath];
     cell.model = model;
@@ -350,10 +349,7 @@ static void *ObserverContextScrollView;
         
     }
 }
-//- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
-//    YQCalendarCell *cell = (YQCalendarCell *)[collectionView cellForItemAtIndexPath:indexPath];
-//    [cell reset];
-//}
+
 
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{

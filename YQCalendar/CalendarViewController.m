@@ -42,15 +42,12 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
     self.originalInsetTop = self.tableView.contentInset.top+NavHeight(self);
     self.monthCalendar.delegate = self;
  
-    DDLogDebug(@"addcalendar inset top = %lf",self.tableView.contentInset.top);
-
    
     self.calendarHeader = [[YQCalendarHeader alloc] initWithFrame:CGRectMake(0,self.automaticallyAdjustsScrollViewInsets? NavHeight(self):0, self.monthCalendar.bounds.size.width, [YQCalendarAppearence share].headerHeight)];
     self.calendarHeader.backgroundColor = [UIColor orangeColor];
     [self.view addSubview:self.calendarHeader];
     self.monthCalendar.headerView = self.calendarHeader;
    
- 
    
     self.weekCalendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.calendarHeader.frame), self.tableView.bounds.size.width, RowHeight) appearence:nil mode:YQCalendarModeWeek];
     [self.view addSubview:self.weekCalendar];
@@ -58,8 +55,8 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
     self.weekCalendar.hidden = YES;
     self.weekCalendar.backgroundColor = [UIColor greenColor];
 
-    self.minInsetTop = CGRectGetMinY(self.weekCalendar.frame)+self.navigationController.navigationBar.bounds.size.height;
-    
+    self.minInsetTop = CGRectGetMaxY(self.weekCalendar.frame);
+
     [self.monthCalendar scrollToDate:[NSDate date]];
     [self.weekCalendar scrollToDate:[NSDate date]];
     
@@ -150,12 +147,12 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
                               initializer:^(POPMutableAnimatableProperty *prop) {
                                   prop.writeBlock = ^(UIScrollView *scrollView, const CGFloat values[]) {
                                       self.tableView.contentInset = UIEdgeInsetsMake(values[0], 0, 0, 0);
-                                      self.tableView.contentOffset = CGPointMake(0, -values[0]);                                                                                                                                                                                                                                   
+                                      self.tableView.contentOffset = CGPointMake(0, -values[0]);
+                                      DDLogInfo(@"value == %lf",-values[0]);
                                       [self checkWeekCalendarShouldShow];
                                   };
                               }];
         
-//        animation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:.55:.88:.92:.96];
         animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
         animation.duration = YQAnmiationDuration;
         [self.tableView pop_addAnimation:animation forKey:ContentInsetAnimation];
@@ -178,17 +175,10 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
         //正往上
         if(difference > CGRectGetHeight(self.weekCalendar.bounds)){
             //切换到周视图
-//            [UIView animateWithDuration:YQAnmiationDuration animations:^{
-//                self.tableView.contentInset = UIEdgeInsetsMake(self.minInsetTop, 0, 0, 0);
-//                self.tableView.contentOffset = CGPointMake(0, -self.minInsetTop);
-//            } completion:^(BOOL finished) {
-//                
-//            }];
+
             POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
             animation.fromValue = @(self.tableView.contentInset.top);
             animation.toValue = @(self.minInsetTop);
-            
-        
             
         }else{
             
