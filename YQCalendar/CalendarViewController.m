@@ -120,7 +120,7 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
             }
         }
  
-        [self checkWeekCalendarShouldShow];
+        [self checkWeekCalendarShouldShowBySelf:self];
     }
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -141,15 +141,16 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
 - (POPBasicAnimation *)scrollViewContentInsetAnimation{
     POPBasicAnimation *animation = [self.tableView pop_animationForKey:ContentInsetAnimation];
     if(!animation){
+        __weak typeof(self) weakSelf = self;
         animation = [POPBasicAnimation animation];
         animation.property = [POPMutableAnimatableProperty
                               propertyWithName:ContentInsetAnimation
                               initializer:^(POPMutableAnimatableProperty *prop) {
                                   prop.writeBlock = ^(UIScrollView *scrollView, const CGFloat values[]) {
-                                      self.tableView.contentInset = UIEdgeInsetsMake(values[0], 0, 0, 0);
-                                      self.tableView.contentOffset = CGPointMake(0, -values[0]);
-                                      DDLogInfo(@"value == %lf",-values[0]);
-                                      [self checkWeekCalendarShouldShow];
+                                      __strong typeof(weakSelf) strongSelf = weakSelf;
+                                      strongSelf.tableView.contentInset = UIEdgeInsetsMake(values[0], 0, 0, 0);
+                                      strongSelf.tableView.contentOffset = CGPointMake(0, -values[0]);
+                                      [strongSelf checkWeekCalendarShouldShowBySelf:strongSelf];
                                   };
                               }];
         
@@ -159,12 +160,12 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
     }
     return animation;
 }
-- (void)checkWeekCalendarShouldShow{
-    if(self.tableView.contentOffset.y > self.criticalOriginY){//这里不能 >= 在等于的情况下是不应该显示的
-        self.weekCalendar.hidden = NO;
+- (void)checkWeekCalendarShouldShowBySelf:(CalendarViewController *)weakSelf{
+    if(weakSelf.tableView.contentOffset.y > weakSelf.criticalOriginY){//这里不能 >= 在等于的情况下是不应该显示的
+        weakSelf.weekCalendar.hidden = NO;
     }else{
-        if(!self.weekCalendar.isHidden){
-            self.weekCalendar.hidden = YES;
+        if(!weakSelf.weekCalendar.isHidden){
+            weakSelf.weekCalendar.hidden = YES;
         }
     }
 
