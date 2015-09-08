@@ -65,11 +65,6 @@ typedef NS_ENUM(NSUInteger, YQCalendarMode) {
 
 //@property (nonatomic, assign) YQCalendarMode *mode;
 
-/**
- *  这并不是真正的单例，而是帮助cell快速访问已经生成的实例，所以不能通过这个方法来创建实例
- *
- *  @return
- */
 + (instancetype)share;
 
 

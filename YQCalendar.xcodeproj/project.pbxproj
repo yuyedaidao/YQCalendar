@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		21269E131B8AC7E20044B7F6 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21269E121B8AC7E20044B7F6 /* TableViewController.m */; };
-		21269E161B8B2EB70044B7F6 /* CalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21269E151B8B2EB70044B7F6 /* CalendarViewController.m */; };
+		217B47841B93F30000073AF8 /* NewCalendarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 217B47831B93F30000073AF8 /* NewCalendarViewController.m */; };
+		217B47871B9405BB00073AF8 /* YQCalendarWeekLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 217B47861B9405BB00073AF8 /* YQCalendarWeekLabel.m */; };
 		21883F2E1B905C7600A2EAA7 /* YQCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21883F2D1B905C7600A2EAA7 /* YQCalendarView.m */; };
 		21CF490A1B856BF00035CC44 /* YQCalendarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21CF49081B856BF00035CC44 /* YQCalendarCell.m */; };
 		21CF49111B85A7480035CC44 /* YQCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21CF49101B85A7480035CC44 /* YQCellModel.m */; };
@@ -40,8 +41,10 @@
 		0BBA89EDD22D8817DA87D9B2 /* Pods-YQCalendarTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YQCalendarTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YQCalendarTests/Pods-YQCalendarTests.debug.xcconfig"; sourceTree = "<group>"; };
 		21269E111B8AC7E20044B7F6 /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
 		21269E121B8AC7E20044B7F6 /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
-		21269E141B8B2EB70044B7F6 /* CalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarViewController.h; sourceTree = "<group>"; };
-		21269E151B8B2EB70044B7F6 /* CalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarViewController.m; sourceTree = "<group>"; };
+		217B47821B93F30000073AF8 /* NewCalendarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCalendarViewController.h; sourceTree = "<group>"; };
+		217B47831B93F30000073AF8 /* NewCalendarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCalendarViewController.m; sourceTree = "<group>"; };
+		217B47851B9405BB00073AF8 /* YQCalendarWeekLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YQCalendarWeekLabel.h; sourceTree = "<group>"; };
+		217B47861B9405BB00073AF8 /* YQCalendarWeekLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YQCalendarWeekLabel.m; sourceTree = "<group>"; };
 		21883F2C1B905C7600A2EAA7 /* YQCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YQCalendarView.h; sourceTree = "<group>"; };
 		21883F2D1B905C7600A2EAA7 /* YQCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YQCalendarView.m; sourceTree = "<group>"; };
 		21CF49071B856BF00035CC44 /* YQCalendarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YQCalendarCell.h; sourceTree = "<group>"; };
@@ -140,8 +143,8 @@
 				55A95F0B1B84C3DE005DFD41 /* Supporting Files */,
 				21269E111B8AC7E20044B7F6 /* TableViewController.h */,
 				21269E121B8AC7E20044B7F6 /* TableViewController.m */,
-				21269E141B8B2EB70044B7F6 /* CalendarViewController.h */,
-				21269E151B8B2EB70044B7F6 /* CalendarViewController.m */,
+				217B47821B93F30000073AF8 /* NewCalendarViewController.h */,
+				217B47831B93F30000073AF8 /* NewCalendarViewController.m */,
 			);
 			path = YQCalendar;
 			sourceTree = "<group>";
@@ -188,6 +191,8 @@
 				5563587A1B8769E500353BF3 /* YQCalendarHeader.m */,
 				21883F2C1B905C7600A2EAA7 /* YQCalendarView.h */,
 				21883F2D1B905C7600A2EAA7 /* YQCalendarView.m */,
+				217B47851B9405BB00073AF8 /* YQCalendarWeekLabel.h */,
+				217B47861B9405BB00073AF8 /* YQCalendarWeekLabel.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -369,15 +374,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				55A95F141B84C3DE005DFD41 /* ViewController.m in Sources */,
+				217B47841B93F30000073AF8 /* NewCalendarViewController.m in Sources */,
 				55A95F111B84C3DE005DFD41 /* AppDelegate.m in Sources */,
 				5563587B1B8769E500353BF3 /* YQCalendarHeader.m in Sources */,
 				21CF49111B85A7480035CC44 /* YQCellModel.m in Sources */,
 				21883F2E1B905C7600A2EAA7 /* YQCalendarView.m in Sources */,
 				21269E131B8AC7E20044B7F6 /* TableViewController.m in Sources */,
 				55A95F391B84D1FF005DFD41 /* YQCalendarAppearence.m in Sources */,
+				217B47871B9405BB00073AF8 /* YQCalendarWeekLabel.m in Sources */,
 				55A95F0E1B84C3DE005DFD41 /* main.m in Sources */,
 				55A95F361B84C46F005DFD41 /* YQCalendar.m in Sources */,
-				21269E161B8B2EB70044B7F6 /* CalendarViewController.m in Sources */,
 				21CF490A1B856BF00035CC44 /* YQCalendarCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

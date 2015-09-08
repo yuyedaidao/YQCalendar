@@ -15,32 +15,10 @@
 static NSString *const Identifier = @"YQCalendarCell";
 static NSString *const KeyPathContentOffset = @"contentOffset";
 
-static void *ObserverContextScrollView;
-
-@implementation UIScrollView (YQCalendar)
-
-- (void)addCalendar:(YQCalendar *)calendar{
-    if(calendar){
-        calendar.frame = CGRectOffset(calendar.frame, 0, -CGRectGetHeight(calendar.bounds)+self.contentInset.top);
-        if(calendar.mode == YQCalendarModeMonth){
-            self.contentInset = UIEdgeInsetsMake(self.contentInset.top+CGRectGetHeight(calendar.bounds)+[YQCalendarAppearence share].headerHeight, 0, 0, 0);
-            NSLog(@"calendar inset = %@",NSStringFromUIEdgeInsets(self.contentInset));
-        }else if(calendar.mode == YQCalendarModeWeek){
-            //TODO:实现单个时候的inset
-        }
-        
-        [self addSubview:calendar];
-        [self sendSubviewToBack:calendar];
-        
-    }
-}
-
-@end
-
-
 
 @interface YQCalendar ()<UICollectionViewDataSource,UICollectionViewDelegate>
 
+@property (nonatomic, strong) YQCalendarAppearence *appearence;
 /**
  *  最小时间月份的初始时间
  */
@@ -61,34 +39,18 @@ static void *ObserverContextScrollView;
 @implementation YQCalendar
 
 - (instancetype)init{
-    return [self initWithFrame:CGRectZero appearence:nil mode:YQCalendarModeMonth];
+    return [self initWithFrame:CGRectZero  mode:YQCalendarModeMonth];
 }
-
 - (instancetype)initWithFrame:(CGRect)frame{
-    return [self initWithFrame:frame appearence:nil mode:YQCalendarModeMonth];
+    return [self initWithFrame:frame mode:YQCalendarModeMonth];
 }
-
-- (instancetype)initWithAppearence:(YQCalendarAppearence *)appearence{
-    return [self initWithFrame:CGRectZero appearence:appearence mode:YQCalendarModeMonth];
-}
-- (instancetype)initWithFrame:(CGRect)frame appearence:(YQCalendarAppearence *)appearence{
-    return [self initWithFrame:frame appearence:appearence mode:YQCalendarModeMonth];
-}
-- (instancetype)initWithFrame:(CGRect)frame appearence:(YQCalendarAppearence *)appearence mode:(YQCalendarMode)mode{
-    return [self initWithFrame:frame appearence:appearence mode:mode hasNavigation:YES];
-}
-- (instancetype)initWithFrame:(CGRect)frame appearence:(YQCalendarAppearence *)appearence mode:(YQCalendarMode)mode hasNavigation:(BOOL)hasNav{
-
+- (instancetype)initWithFrame:(CGRect)frame mode:(YQCalendarMode)mode{
     if(self = [super initWithFrame:frame]){
-        _hasNavigation = hasNav;
-        _appearence = appearence;
         _mode = mode;
         [self prepare];
-        
     }
     return self;
 }
-
 - (void)awakeFromNib{
     [self prepare];
 }
@@ -116,7 +78,7 @@ static void *ObserverContextScrollView;
     self.collectionLayout.itemSize = CGSizeMake(width, height);
     
     if(!_appearence){
-        _appearence = [[YQCalendarAppearence alloc] init];
+        _appearence = [YQCalendarAppearence share];
     }
     
     _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:self.collectionLayout];
@@ -138,9 +100,7 @@ static void *ObserverContextScrollView;
     [RACObserve(self, currentMonthBeginningDate) subscribeNext:^(NSDate *date) {
         @strongify(self)
         if(self.mode == YQCalendarModeMonth){
-            if(self.headerView){
-                self.headerView.monthLabel.text = [date formattedDateWithFormat:@"yyyy-MM"];
-            }
+        
             //TODO:改变策略，获取当前的目标row
             //如果当前月有select按select所在行，如果有今天，按今天所在行，如果没有按第一行
             NSDate *today = [NSDate date];
@@ -167,6 +127,7 @@ static void *ObserverContextScrollView;
     NSDate *date = [NSDate date];
     self.currentMonthBeginningDate = [NSDate dateWithYear:date.year month:date.month day:1];
 }
+
 
 - (void)setCurrentMonthBegginningDateWithOffset:(CGFloat)offset{
     if(self.mode == YQCalendarModeMonth){
@@ -203,7 +164,6 @@ static void *ObserverContextScrollView;
     YQCellModel *model = [[YQCellModel alloc] init];
     model.indexPath = indexPath;
     model.cellMode = self.mode;
-    
     if(self.mode == YQCalendarModeMonth){
         model.column = indexPath.item/RowCountMonthMode;
         model.row = indexPath.item%RowCountMonthMode;
@@ -216,54 +176,20 @@ static void *ObserverContextScrollView;
         model.date = [firstDay dateByAddingDays:index-week+([YQCalendarAppearence share].firstDayIsSunday?1:2)];
     }else if(self.mode == YQCalendarModeWeek){
         model.date = [self.minBeginningDate dateByAddingDays:indexPath.item];
+
+        NSInteger day = model.date.day;
+        NSDate *firstDay = [model.date dateByAddingDays:-day+1];
+        NSInteger weekDay = firstDay.weekday;
+        NSInteger index = day-1+([YQCalendarAppearence share].firstDayIsSunday? weekDay-1:weekDay-2);
+        model.row = index/RowCountMonthMode;
+        model.column = index%ColumnCount;
     }
     
     return model;
 }
 
-#pragma mark observer
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    DDLogError(@"-------offset y = %lf",self.scrollView.contentOffset.y);
-//    if(self.expanded){//展开状态如果往上超过了临界值，自动关闭
-//        CGFloat offsetY = self.scrollView.contentOffset.y;
-//        if(offsetY >= -self.tempOffsetY-[YQCalendarAppearence share].criticalOffset){
-//            DDLogInfo(@"temp+cri = %lf offset = %lf",-self.tempOffsetY-[YQCalendarAppearence share].criticalOffset,offsetY);
-//            //执行动画
-//            [UIView animateWithDuration:YQAnmiationDuration animations:^{
-//                [self.scrollView setContentInset:self.scrollViewOriginalInset];
-//                self.scrollView.contentOffset = CGPointMake(0, -self.scrollViewOriginalInset.top);
-//            } completion:^(BOOL finished) {
-//                self.tempOffsetY = self.scrollView.contentOffset.y;
-//                self.expanded = NO;
-//            }];
-//        }
-//    }else{//关闭状态如果向下超过了临界值，自动展开
-//        CGFloat offsetY = self.scrollView.contentOffset.y;
-//        if(offsetY <= -self.tempOffsetY-[YQCalendarAppearence share].criticalOffset){
-//            //执行动画
-//            [UIView animateWithDuration:YQAnmiationDuration animations:^{
-//                [self.scrollView setContentInset:UIEdgeInsetsMake(CGRectGetHeight(self.bounds), 0, 0, 0)];
-//                self.scrollView.contentOffset = CGPointMake(0, -CGRectGetHeight(self.bounds));
-//            } completion:^(BOOL finished) {
-//                self.tempOffsetY = self.scrollView.contentOffset.y;
-//                self.expanded = YES;
-//            }];
-//        }
-//    }
-    
-}
 
 #pragma mark override
-
-
-//- (void)layoutSubviews{
-//    [super layoutSubviews];
-//}
-
-//- (void)setAppearence:(YQCalendarAppearence *)appearence{
-//    _appearence = appearence;
-//    self.collectionView
-//}
 - (void)setMinDate:(NSDate *)minDate{
     if(_minDate != minDate){
         _minDate = minDate;
@@ -319,6 +245,7 @@ static void *ObserverContextScrollView;
     if([self.selectedDate isEqualToDate:model.date]){
         self.selectedIndexPath = indexPath;
         [cell select];
+        self.targetRowOriginY = model.row*self.collectionLayout.itemSize.height;
     }
 
     return cell;
@@ -329,14 +256,15 @@ static void *ObserverContextScrollView;
         YQCalendarCell *oldCell = (YQCalendarCell *)[collectionView cellForItemAtIndexPath:self.selectedIndexPath];
         [oldCell reset];
     }
- 
         
     YQCalendarCell *cell = (YQCalendarCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    if(cell.model.dateType == YQDateTypeToday || cell.model.dateType == YQDateTypeCurrentMoth){
+    if(cell.model.dateType <= YQDateTypeToday){
         self.selectedDate = cell.model.date;
         self.selectedIndexPath = indexPath;
         if(self.mode == YQCalendarModeMonth){
-            self.targetRowOriginY = cell.model.row*self.collectionLayout.itemSize.height-self.headerView.frame.size.height;
+            self.targetRowOriginY = cell.model.row*self.collectionLayout.itemSize.height;
+        }else if(self.mode == YQCalendarModeWeek){
+            self.targetRowOriginY = cell.model.row*self.collectionLayout.itemSize.height;
         }
         [cell select];
     }else if(cell.model.dateType == YQDateTypePreMonth){
@@ -346,7 +274,6 @@ static void *ObserverContextScrollView;
     }
     if([self.delegate respondsToSelector:@selector(calendar:didSelectDate:)]){
         [self.delegate calendar:self didSelectDate:cell.model.date];
-        
     }
 }
 
@@ -370,24 +297,30 @@ static void *ObserverContextScrollView;
     if([self.selectedDate isEqualToDate:date]){
         return;
     }
-    YQCalendarCell *cell = (YQCalendarCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPath];
-    [cell reset];
+//    YQCalendarCell *cell = (YQCalendarCell *)[self.collectionView cellForItemAtIndexPath:self.selectedIndexPath];
+//    [cell reset];
     self.selectedDate = date;
     [self.collectionView reloadData];
 }
 - (void)scrollToDate:(NSDate *)date{
+    [self scrollToDate:date selected:YES];
+}
+- (void)scrollToDate:(NSDate *)date selected:(BOOL)selected{
+    
     if(self.mode == YQCalendarModeWeek){
         [self.collectionView setContentOffset:CGPointMake(CGRectGetWidth(self.collectionView.bounds)*[date weeksLaterThan:self.minBeginningDate], 0)];
     }else{
-        
         [self.collectionView setContentOffset:CGPointMake(CGRectGetWidth(self.collectionView.bounds)*[self sectionIndexOfDate:date], 0) animated:NO];
+    }
+    if(selected){
+        [self selectCellByDate:date];
     }
 }
 - (void)changeModel{
     //如果当前月份有选中时间滚动到这个时间所在的行
     //如果当前月份有今天就滚动到今天所在的行
     //如果什么都没有就滚动到第一行
-    NSLog(@"%@:%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+ 
     if(self.mode == YQCalendarModeMonth){
         self.mode = YQCalendarModeWeek;
 

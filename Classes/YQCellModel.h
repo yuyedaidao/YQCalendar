@@ -12,8 +12,8 @@
 typedef NS_ENUM(NSUInteger, YQDateType) {
     YQDateTypeDefault = 0,
     YQDateTypeCurrentMoth = 1,
+    YQDateTypeToday = 2,
     YQDateTypePreMonth, //previous
-    YQDateTypeToday,
     YQDateTypeNextMonth,
 };
 
