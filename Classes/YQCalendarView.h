@@ -51,6 +51,6 @@ static CGFloat HeightWeekLabel = 30.0f;
 - (void)calendarScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)calendarScrollViewWillBeginDragging:(UIScrollView *)scrollView;
 - (void)calendarScrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
-//- (void)calendarScrollViewDidEndDecelerating:(UIScrollView *)scrollView;
+- (void)calendarScrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 //- (void)calendarScrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView;
 @end

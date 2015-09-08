@@ -52,7 +52,9 @@
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.calendarView calendarScrollViewWillBeginDragging:scrollView];
 }
-
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    [self.calendarView calendarScrollViewDidEndDecelerating:scrollView];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -98,11 +98,12 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
     [super layoutSubviews];
     self.originalInsetTop = self.scrollView.contentInset.top;
     self.minInsetTop = CGRectGetHeight(self.weekCalendar.bounds);
+    self.weekCalendar.frame = CGRectMake(CGRectGetMinX(self.scrollView.frame), CGRectGetMinY(self.scrollView.frame), self.scrollView.frame.size.width, self.weekCalendar.frame.size.height);
 }
 - (void)willMoveToSuperview:(UIView *)newSuperview{
 //    [newSuperview addSubview:self.weekCalendar];
     [self.scrollView.superview addSubview:self.weekCalendar];
-    self.weekCalendar.frame = CGRectMake(CGRectGetMinX(self.scrollView.frame), CGRectGetMinY(self.scrollView.frame), self.weekCalendar.frame.size.width, self.weekCalendar.frame.size.height);
+    
     
 }
 #pragma mark calendar delegate
@@ -128,9 +129,10 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
 - (void)calendarScrollViewDidScroll:(UIScrollView *)scrollView{
 
     if(scrollView.isDragging || scrollView.isDecelerating){
-        if(-scrollView.contentOffset.y>=self.minInsetTop && -scrollView.contentOffset.y<=self.originalInsetTop){
-            
+        if(-scrollView.contentOffset.y>=self.minInsetTop && -scrollView.contentOffset.y<=self.originalInsetTop){//
             scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
+            scrollView.contentOffset = scrollView.contentOffset;
+//            [self checkChangeMode];
             
         }else if(-scrollView.contentOffset.y>self.originalInsetTop){
             if(scrollView.contentInset.top != self.originalInsetTop){
@@ -144,6 +146,7 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
         
         [self checkWeekCalendarShouldShowBySelf:self];
     }
+    NSLog(@"scroll ...");
 
 }
 - (void)calendarScrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -159,9 +162,21 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
 - (void)calendarScrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
     if(!decelerate){
         [self checkChangeMode];
+    }else{
+        //如果在范围内，应该先停止减速运动再
+        if(-scrollView.contentOffset.y>=self.minInsetTop && -scrollView.contentOffset.y<=self.originalInsetTop){
+            scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
+            scrollView.contentOffset = scrollView.contentOffset;
+            [self checkChangeMode];
+        }
     }
+//    [self checkChangeMode];
+//    NSLog(@"end drag");
 }
-
+- (void)calendarScrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+//    [self checkChangeMode];
+//    NSLog(@"end dec");
+}
 
 - (POPBasicAnimation *)scrollViewContentInsetAnimation{
     POPBasicAnimation *animation = [self.scrollView pop_animationForKey:ContentInsetAnimation];
