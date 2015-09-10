@@ -40,7 +40,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
-    
+    cell.textLabel.text = [@(indexPath.row) stringValue];
     return cell;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -55,7 +55,12 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     [self.calendarView calendarScrollViewDidEndDecelerating:scrollView];
 }
-
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+    [self.calendarView calendarScrollViewWillEndDragging:scrollView withVelocity:velocity targetContentOffset:targetContentOffset];
+}
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+    [self.calendarView calendarScrollViewWillBeginDecelerating:scrollView];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -12,6 +12,12 @@
 
 static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
 
+typedef NS_ENUM(NSUInteger, YQScrollState) {
+    YQScrollStateDefault,
+    YQScrollStateWillUp,
+    YQScrollStateWillDown,
+};
+
 @implementation UIScrollView (YQCalendar)
 
 //- (void)setCalendarScrollDelegate:(id<YQCalendarScrollDelegate>)calendarScrollDelegate{
@@ -44,6 +50,7 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
 @property (nonatomic, assign) CGFloat begeinDragOffset;
 @property (nonatomic, assign) CGFloat minInsetTop;
 @property (nonatomic, assign) CGFloat originalInsetTop;
+@property (nonatomic, assign) YQScrollState scrollState;
 
 @end
 
@@ -92,6 +99,12 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
     self.originalInsetTop = self.scrollView.contentInset.top;
     self.minInsetTop = CGRectGetMaxY(self.weekCalendar.frame);
 
+    [self.scrollView addObserver:self forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+#pragma mark observer
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    NSLog(@"change == %@",change);
 }
 #pragma mark override
 -(void)layoutSubviews{
@@ -129,24 +142,23 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
 - (void)calendarScrollViewDidScroll:(UIScrollView *)scrollView{
 
     if(scrollView.isDragging || scrollView.isDecelerating){
-        if(-scrollView.contentOffset.y>=self.minInsetTop && -scrollView.contentOffset.y<=self.originalInsetTop){//
-            scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
-            scrollView.contentOffset = scrollView.contentOffset;
-//            [self checkChangeMode];
-            
-        }else if(-scrollView.contentOffset.y>self.originalInsetTop){
-            if(scrollView.contentInset.top != self.originalInsetTop){
-                scrollView.contentInset = UIEdgeInsetsMake(self.originalInsetTop, 0, 0, 0);
-            }
-        }else if(-scrollView.contentOffset.y<self.minInsetTop){
-            if(scrollView.contentInset.top != self.minInsetTop){
-                scrollView.contentInset = UIEdgeInsetsMake(self.minInsetTop, 0, 0, 0);
-            }
-        }
+//        if(-scrollView.contentOffset.y>=self.minInsetTop && -scrollView.contentOffset.y<=self.originalInsetTop){//
+////            scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
+////            scrollView.contentOffset = scrollView.contentOffset;
+////            [self checkChangeMode];
+//            
+//        }else if(-scrollView.contentOffset.y>self.originalInsetTop){
+//            if(scrollView.contentInset.top != self.originalInsetTop){
+//                scrollView.contentInset = UIEdgeInsetsMake(self.originalInsetTop, 0, 0, 0);
+//            }
+//        }else if(-scrollView.contentOffset.y<self.minInsetTop){
+//            if(scrollView.contentInset.top != self.minInsetTop){
+//                scrollView.contentInset = UIEdgeInsetsMake(self.minInsetTop, 0, 0, 0);
+//            }
+//        }
         
         [self checkWeekCalendarShouldShowBySelf:self];
     }
-    NSLog(@"scroll ...");
 
 }
 - (void)calendarScrollViewWillBeginDragging:(UIScrollView *)scrollView{
@@ -160,18 +172,78 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
 
 }
 - (void)calendarScrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if(!decelerate){
-        [self checkChangeMode];
-    }else{
-        //如果在范围内，应该先停止减速运动再
-        if(-scrollView.contentOffset.y>=self.minInsetTop && -scrollView.contentOffset.y<=self.originalInsetTop){
-            scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
-            scrollView.contentOffset = scrollView.contentOffset;
-            [self checkChangeMode];
+//    NSLog(@"%@:%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
+    NSLog(@"end dragging");
+    CGFloat difference = self.scrollView.contentOffset.y-self.begeinDragOffset;
+    if(scrollView.contentInset.top == self.originalInsetTop){
+        if(!decelerate){
+            //正往上
+//            if(difference > CGRectGetHeight(self.weekCalendar.bounds)){
+                //切换
+                [self checkChangeMode];
+//            }
+        }else{
+            //正往上
+            if(difference > CGRectGetHeight(self.weekCalendar.bounds)){
+                //切换
+                self.scrollState = YQScrollStateWillUp;
+            }
+        }
+    }else if(scrollView.contentInset.top == self.minInsetTop){
+        
+        if(!decelerate){
+            if(difference < -CGRectGetHeight(self.weekCalendar.bounds)){
+                [self checkChangeMode];
+            }
+        }else{
+            if(difference < -CGRectGetHeight(self.weekCalendar.bounds)){
+                self.scrollState = YQScrollStateWillDown;
+            }
         }
     }
-//    [self checkChangeMode];
-//    NSLog(@"end drag");
+}
+- (void)calendarScrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+    
+    //最新策略
+    //先判断edgeInset，如果开始处于最大值处，往上滑,禁止减速，然后根据移动距离判断日历模式变换 往下滑不做任何处理基于bounces效果复原
+    //如果开始处于最小值，往下滑，禁止减速，然后根据移动距离判断日历模式变化 往上滑不做任何处理
+//    if(scrollView.contentInset.top <= self.originalInsetTop && scrollView.contentInset.top > self.minInsetTop){//最大值
+//        if(velocity.y>0){//往上滑
+//            NSLog(@"往上滑");
+////            [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+////            [self checkChangeMode];
+//            self.scrollState = YQScrollStateWillUp;
+//        }else if(velocity.y<0){//往下滑
+//            //do nothing
+//            NSLog(@"往下滑");
+////            [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+////            [self checkChangeMode];
+//            self.scrollState = YQScrollStateWillDown;
+//        }else{//没有减速
+//            NSLog(@"没有减速");
+//            [self checkChangeMode];
+//        }
+//    }else if(scrollView.contentInset.top > self.originalInsetTop){
+//        NSLog(@"大于最大 top");
+//    }else{
+//        NSLog(@"小于最小top");
+//    }
+//    if(scrollView.contentOffset.y )
+    
+}
+- (void)calendarScrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+    NSLog(@"will decelerating");
+    if(self.scrollState == YQScrollStateWillUp || self.scrollState == YQScrollStateWillDown){
+        [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+        NSLog(@"begin %lf now %lf",self.begeinDragOffset,scrollView.contentOffset.y);
+        if(self.scrollState==YQScrollStateWillDown){
+            
+            CGFloat difference = self.scrollView.contentOffset.y-self.begeinDragOffset;
+            NSLog(@"移动距离 %lf",difference);
+        }
+        [self checkChangeMode];
+        self.scrollState = YQScrollStateDefault;
+    }
 }
 - (void)calendarScrollViewDidEndDecelerating:(UIScrollView *)scrollView{
 //    [self checkChangeMode];
