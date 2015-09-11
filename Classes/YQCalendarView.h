@@ -14,18 +14,6 @@ static CGFloat HeightWeekLabel = 30.0f;
 @class YQCalendarView;
 
 
-
-//@protocol YQCalendarScrollDelegate <NSObject>
-//- (void)calendarScrollViewDidScroll:(UIScrollView *)scrollView;
-//- (void)calendarScrollViewWillBeginDragging:(UIScrollView *)scrollView;
-//- (void)calendarScrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
-//- (void)calendarScrollViewDidEndDecelerating:(UIScrollView *)scrollView;
-//
-//@optional
-//- (void)calendarScrollViewWillBeginDecelerating:(UIScrollView *)scrollView;
-//- (void)calendarScrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView;
-//@end
-
 @interface UIScrollView (YQCalendar)
 //@property (nonatomic, weak) id<YQCalendarScrollDelegate> calendarScrollDelegate;
 - (void)addCalendarView:(YQCalendarView *)calendarView;
@@ -51,8 +39,6 @@ static CGFloat HeightWeekLabel = 30.0f;
 - (void)calendarScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)calendarScrollViewWillBeginDragging:(UIScrollView *)scrollView;
 - (void)calendarScrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
-- (void)calendarScrollViewDidEndDecelerating:(UIScrollView *)scrollView;
 - (void)calendarScrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset;
 - (void)calendarScrollViewWillBeginDecelerating:(UIScrollView *)scrollView;
-//- (void)calendarScrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView;
 @end

@@ -52,9 +52,6 @@
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self.calendarView calendarScrollViewWillBeginDragging:scrollView];
 }
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    [self.calendarView calendarScrollViewDidEndDecelerating:scrollView];
-}
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
     [self.calendarView calendarScrollViewWillEndDragging:scrollView withVelocity:velocity targetContentOffset:targetContentOffset];
 }

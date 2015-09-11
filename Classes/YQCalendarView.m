@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
 @property (nonatomic, assign) CGFloat begeinDragOffset;
 @property (nonatomic, assign) CGFloat minInsetTop;
 @property (nonatomic, assign) CGFloat originalInsetTop;
+@property (nonatomic, assign) CGFloat minMoveDistance;
 @property (nonatomic, assign) YQScrollState scrollState;
 
 @end
@@ -112,6 +113,7 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
     self.originalInsetTop = self.scrollView.contentInset.top;
     self.minInsetTop = CGRectGetHeight(self.weekCalendar.bounds);
     self.weekCalendar.frame = CGRectMake(CGRectGetMinX(self.scrollView.frame), CGRectGetMinY(self.scrollView.frame), self.scrollView.frame.size.width, self.weekCalendar.frame.size.height);
+    self.minMoveDistance = CGRectGetHeight(self.weekCalendar.frame);
 }
 - (void)willMoveToSuperview:(UIView *)newSuperview{
 //    [newSuperview addSubview:self.weekCalendar];
@@ -142,21 +144,6 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
 - (void)calendarScrollViewDidScroll:(UIScrollView *)scrollView{
 
     if(scrollView.isDragging || scrollView.isDecelerating){
-//        if(-scrollView.contentOffset.y>=self.minInsetTop && -scrollView.contentOffset.y<=self.originalInsetTop){//
-////            scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
-////            scrollView.contentOffset = scrollView.contentOffset;
-////            [self checkChangeMode];
-//            
-//        }else if(-scrollView.contentOffset.y>self.originalInsetTop){
-//            if(scrollView.contentInset.top != self.originalInsetTop){
-//                scrollView.contentInset = UIEdgeInsetsMake(self.originalInsetTop, 0, 0, 0);
-//            }
-//        }else if(-scrollView.contentOffset.y<self.minInsetTop){
-//            if(scrollView.contentInset.top != self.minInsetTop){
-//                scrollView.contentInset = UIEdgeInsetsMake(self.minInsetTop, 0, 0, 0);
-//            }
-//        }
-        
         [self checkWeekCalendarShouldShowBySelf:self];
     }
 
@@ -167,87 +154,69 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
     }else{
         self.criticalOriginY = self.weekCalendar.targetRowOriginY+CGRectGetMinY(self.frame);
     }
-    NSLog(@"criticalOriginY ==== %lf",self.criticalOriginY);
     self.begeinDragOffset = scrollView.contentOffset.y;
 
 }
 - (void)calendarScrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-//    NSLog(@"%@:%@",NSStringFromClass([self class]),NSStringFromSelector(_cmd));
-    NSLog(@"end dragging");
-    CGFloat difference = self.scrollView.contentOffset.y-self.begeinDragOffset;
-    if(scrollView.contentInset.top == self.originalInsetTop){
-        if(!decelerate){
-            //正往上
-//            if(difference > CGRectGetHeight(self.weekCalendar.bounds)){
-                //切换
-                [self checkChangeMode];
-//            }
-        }else{
-            //正往上
-            if(difference > CGRectGetHeight(self.weekCalendar.bounds)){
-                //切换
-                self.scrollState = YQScrollStateWillUp;
-            }
-        }
-    }else if(scrollView.contentInset.top == self.minInsetTop){
-        
-        if(!decelerate){
-            if(difference < -CGRectGetHeight(self.weekCalendar.bounds)){
-                [self checkChangeMode];
-            }
-        }else{
-            if(difference < -CGRectGetHeight(self.weekCalendar.bounds)){
-                self.scrollState = YQScrollStateWillDown;
-            }
-        }
+
+    if(!decelerate){
+        [self checkChangeMode];
     }
 }
 - (void)calendarScrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
     
-    //最新策略
-    //先判断edgeInset，如果开始处于最大值处，往上滑,禁止减速，然后根据移动距离判断日历模式变换 往下滑不做任何处理基于bounces效果复原
-    //如果开始处于最小值，往下滑，禁止减速，然后根据移动距离判断日历模式变化 往上滑不做任何处理
-//    if(scrollView.contentInset.top <= self.originalInsetTop && scrollView.contentInset.top > self.minInsetTop){//最大值
-//        if(velocity.y>0){//往上滑
-//            NSLog(@"往上滑");
-////            [scrollView setContentOffset:scrollView.contentOffset animated:NO];
-////            [self checkChangeMode];
-//            self.scrollState = YQScrollStateWillUp;
-//        }else if(velocity.y<0){//往下滑
-//            //do nothing
-//            NSLog(@"往下滑");
-////            [scrollView setContentOffset:scrollView.contentOffset animated:NO];
-////            [self checkChangeMode];
-//            self.scrollState = YQScrollStateWillDown;
-//        }else{//没有减速
-//            NSLog(@"没有减速");
-//            [self checkChangeMode];
-//        }
-//    }else if(scrollView.contentInset.top > self.originalInsetTop){
-//        NSLog(@"大于最大 top");
-//    }else{
-//        NSLog(@"小于最小top");
-//    }
-//    if(scrollView.contentOffset.y )
+    //如果往上滑目标到不了最高边界，直接到最低边界
+    if(velocity.y > 0){//往上
+        //如果当前在最低以下，目标位置不管在哪都到最高处 当然移动范围得超过阀值
+        if(scrollView.contentOffset.y <= -self.minInsetTop){
+            CGFloat distance = self.scrollView.contentOffset.y-self.begeinDragOffset;
+            if(distance > self.minMoveDistance){
+                //移动到最高处
+                self.scrollState = YQScrollStateWillUp;
+            }else{
+                //移动到最低处
+                self.scrollState = YQScrollStateWillDown;
+            }
+        }
+        
+    }else if(velocity.y < 0){
+        if(scrollView.contentOffset.y >= -self.originalInsetTop){
+            
+            CGFloat distance = self.scrollView.contentOffset.y-self.begeinDragOffset;
+            if(scrollView.contentOffset.y <= -self.minInsetTop){//脱手点在最高线和最低线之间
+                if(-distance > self.minMoveDistance){
+                    //移到最低处
+                    self.scrollState = YQScrollStateWillDown;
+                }else{
+                    //移到最高处
+                    self.scrollState = YQScrollStateWillUp;
+                }
+            }else{//脱手点在最高点纸上
+                //如果目标在最高线和最低线之间，到最高线，如果在最高线纸上不管
+                if(targetContentOffset->y >= -self.originalInsetTop && targetContentOffset->y <= -self.minInsetTop){
+//                    targetContentOffset->y = -self.minInsetTop;
+                    self.scrollState = YQScrollStateWillUp;//这里的标志并不是很好，其实真是意思是滑动到最顶端这个值处
+                }
+            }
+            
+        }
+    }
     
 }
 - (void)calendarScrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
-    NSLog(@"will decelerating");
-    if(self.scrollState == YQScrollStateWillUp || self.scrollState == YQScrollStateWillDown){
+
+    if(self.scrollState == YQScrollStateWillUp){
         [scrollView setContentOffset:scrollView.contentOffset animated:NO];
-        NSLog(@"begin %lf now %lf",self.begeinDragOffset,scrollView.contentOffset.y);
-        if(self.scrollState==YQScrollStateWillDown){
-            
-            CGFloat difference = self.scrollView.contentOffset.y-self.begeinDragOffset;
-            NSLog(@"移动距离 %lf",difference);
-        }
-        [self checkChangeMode];
-        self.scrollState = YQScrollStateDefault;
+        POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
+        animation.fromValue = @(self.scrollView.contentOffset.y);
+        animation.toValue = @(-self.minInsetTop);
+    }else if(self.scrollState == YQScrollStateWillDown){
+        [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+        POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
+        animation.fromValue = @(self.scrollView.contentOffset.y);
+        animation.toValue = @(-self.originalInsetTop);
     }
-}
-- (void)calendarScrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-//    [self checkChangeMode];
-//    NSLog(@"end dec");
+    self.scrollState = YQScrollStateDefault;
 }
 
 - (POPBasicAnimation *)scrollViewContentInsetAnimation{
@@ -260,8 +229,9 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
                               initializer:^(POPMutableAnimatableProperty *prop) {
                                   prop.writeBlock = ^(UIScrollView *scrollView, const CGFloat values[]) {
                                       __strong typeof(weakSelf) strongSelf = weakSelf;
-                                      strongSelf.scrollView.contentInset = UIEdgeInsetsMake(values[0], 0, 0, 0);
-                                      strongSelf.scrollView.contentOffset = CGPointMake(0, -values[0]);
+//                                      strongSelf.scrollView.contentInset = UIEdgeInsetsMake(values[0], 0, 0, 0);
+//                                      strongSelf.scrollView.contentOffset = CGPointMake(0, -values[0]);
+                                      strongSelf.scrollView.contentOffset = CGPointMake(0, values[0]);
                                       [strongSelf checkWeekCalendarShouldShowBySelf:strongSelf];
                                   };
                               }];
@@ -285,37 +255,44 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
     
 }
 - (void)checkChangeMode{
-    CGFloat difference = self.scrollView.contentOffset.y-self.begeinDragOffset;
-    if(self.weekCalendar.hidden){
-        //正往上
-        if(difference > CGRectGetHeight(self.weekCalendar.bounds)){
-            //切换到周视图
-            
-            POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
-            animation.fromValue = @(self.scrollView.contentInset.top);
-            animation.toValue = @(self.minInsetTop);
-            
+    if(self.scrollView.contentOffset.y > -self.originalInsetTop && self.scrollView.contentOffset.y < -self.minInsetTop){
+        CGFloat difference = self.scrollView.contentOffset.y-self.begeinDragOffset;
+        if(self.weekCalendar.hidden){
+            //正往上
+            if(difference > CGRectGetHeight(self.weekCalendar.bounds)){
+                //切换到周视图
+                
+                POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
+//                animation.fromValue = @(self.scrollView.contentInset.top);
+//                animation.toValue = @(self.minInsetTop);
+                animation.fromValue = @(self.scrollView.contentOffset.y);
+                animation.toValue = @(-self.minInsetTop);
+                
+            }else{
+                
+                POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
+//                animation.fromValue = @(self.scrollView.contentInset.top);
+//                animation.toValue = @(self.originalInsetTop);
+                animation.fromValue = @(self.scrollView.contentOffset.y);
+                animation.toValue = @(-self.originalInsetTop);
+            }
         }else{
-            
-            POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
-            animation.fromValue = @(self.scrollView.contentInset.top);
-            animation.toValue = @(self.originalInsetTop);
-            
+            if(difference < -CGRectGetHeight(self.weekCalendar.bounds)){
+                POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
+//                animation.fromValue = @(self.scrollView.contentInset.top);
+//                animation.toValue = @(self.originalInsetTop);
+                animation.fromValue = @(self.scrollView.contentOffset.y);
+                animation.toValue = @(-self.originalInsetTop);
+            }else{
+                POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
+//                animation.fromValue = @(self.scrollView.contentInset.top);
+//                animation.toValue = @(self.minInsetTop);
+                animation.fromValue = @(self.scrollView.contentOffset.y);
+                animation.toValue = @(-self.minInsetTop);
+            }
         }
-    }else{
-        if(difference < -CGRectGetHeight(self.weekCalendar.bounds)){
-            POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
-            animation.fromValue = @(self.scrollView.contentInset.top);
-            animation.toValue = @(self.originalInsetTop);
-            
-        }else{
-            POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
-            animation.fromValue = @(self.scrollView.contentInset.top);
-            animation.toValue = @(self.minInsetTop);
-            
-        }
+
     }
-    
     
 }
 

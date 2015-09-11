@@ -13,7 +13,7 @@ static NSInteger const RowCountMonthMode = 6;
 static NSInteger const ColumnCount = 7;
 static NSInteger const RowCountWeekMode = 1;
 
-static CGFloat const YQAnmiationDuration = 1.3f;
+static CGFloat const YQAnmiationDuration = 0.3f;
 
 
 UIKIT_STATIC_INLINE CGFloat NavHeight(UIViewController *vc){
