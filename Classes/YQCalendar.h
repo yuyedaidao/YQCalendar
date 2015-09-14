@@ -21,6 +21,7 @@
  *  @param date     当前月的初始时间
  */
 - (void)calendar:(YQCalendar *)calendar didChangeMonth:(NSDate *)date;
+- (void)calendar:(YQCalendar *)calendar anotherShouldReloadWithDate:(NSDate *)date;
 @end
 
 @interface YQCalendar : UIView

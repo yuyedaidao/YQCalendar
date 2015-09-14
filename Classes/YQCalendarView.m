@@ -100,13 +100,9 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
     self.originalInsetTop = self.scrollView.contentInset.top;
     self.minInsetTop = CGRectGetMaxY(self.weekCalendar.frame);
 
-    [self.scrollView addObserver:self forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
-#pragma mark observer
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    NSLog(@"change == %@",change);
-}
+
 #pragma mark override
 -(void)layoutSubviews{
     [super layoutSubviews];
@@ -153,6 +149,7 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
         self.criticalOriginY = self.monthCalendar.targetRowOriginY+CGRectGetMinY(self.frame);
     }else{
         self.criticalOriginY = self.weekCalendar.targetRowOriginY+CGRectGetMinY(self.frame);
+        NSLog(@"self.criticalOriginY == %lf",self.criticalOriginY);
     }
     self.begeinDragOffset = scrollView.contentOffset.y;
 
@@ -243,13 +240,41 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
     return animation;
 }
 - (void)checkWeekCalendarShouldShowBySelf:(YQCalendarView *)mySelf{
-    if(mySelf.scrollView.contentOffset.y > mySelf.criticalOriginY){//这里不能 >= 在等于的情况下是不应该显示的
-        if(mySelf.weekCalendar.isHidden){
-            mySelf.weekCalendar.hidden = NO;
+    NSLog(@"myself contentoffset y %lf, origiy = %lf",self.scrollView.contentOffset.y,self.criticalOriginY);
+    //这里不能 >= 在等于的情况下是不应该显示的,但是如果选中的在最后一行，此时如果等于也需要显示
+//    if(mySelf.criticalOriginY == -(CGRectGetHeight(self.weekCalendar.frame))){
+//        if(mySelf.scrollView.contentOffset.y == mySelf.criticalOriginY){
+//            if(mySelf.weekCalendar.isHidden){
+//                mySelf.weekCalendar.hidden = NO;
+//            }
+//        }else{
+//            if(!mySelf.weekCalendar.isHidden){
+//                mySelf.weekCalendar.hidden = YES;
+//            }
+//        }
+//    }else{
+    
+    if(mySelf.criticalOriginY == -CGRectGetHeight(self.weekCalendar.frame)){
+        
+        if(mySelf.scrollView.contentOffset.y >= mySelf.criticalOriginY){
+            if(mySelf.weekCalendar.isHidden){
+                mySelf.weekCalendar.hidden = NO;
+            }
+        }else{
+            if(!mySelf.weekCalendar.isHidden){
+                mySelf.weekCalendar.hidden = YES;
+            }
         }
     }else{
-        if(!mySelf.weekCalendar.isHidden){
-            mySelf.weekCalendar.hidden = YES;
+        if(mySelf.scrollView.contentOffset.y > mySelf.criticalOriginY){
+            if(mySelf.weekCalendar.isHidden){
+                mySelf.weekCalendar.hidden = NO;
+            }
+        }else{
+            
+            if(!mySelf.weekCalendar.isHidden){
+                mySelf.weekCalendar.hidden = YES;
+            }
         }
     }
     

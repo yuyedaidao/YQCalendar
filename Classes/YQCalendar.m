@@ -101,7 +101,6 @@ static NSString *const KeyPathContentOffset = @"contentOffset";
         @strongify(self)
         if(self.mode == YQCalendarModeMonth){
         
-            //TODO:改变策略，获取当前的目标row
             //如果当前月有select按select所在行，如果有今天，按今天所在行，如果没有按第一行
             NSDate *today = [NSDate date];
             if(self.selectedDate && self.selectedDate.month == date.month){
@@ -121,11 +120,18 @@ static NSString *const KeyPathContentOffset = @"contentOffset";
             if([self.delegate respondsToSelector:@selector(calendar:didChangeMonth:)]){
                 [self.delegate calendar:self didChangeMonth:date];
             }
+        }else if(self.mode == YQCalendarModeWeek){
+        
+            if([self.delegate respondsToSelector:@selector(calendar:didChangeMonth:)]){
+                [self.delegate calendar:self didChangeMonth:date];
+            }
         }
+    
     }];
     
     NSDate *date = [NSDate date];
     self.currentMonthBeginningDate = [NSDate dateWithYear:date.year month:date.month day:1];
+    
 }
 
 
@@ -133,7 +139,17 @@ static NSString *const KeyPathContentOffset = @"contentOffset";
     if(self.mode == YQCalendarModeMonth){
         self.currentMonthBeginningDate = [self.minBeginningDate dateByAddingMonths:offset/CGRectGetWidth(self.collectionView.bounds)];
     }else if(self.mode == YQCalendarModeWeek){
-        //TODO:这里应该计算本周第一天的时间 暂时不需要计算
+        //这一周第一天是哪个月就算哪个月
+        NSDate *firstDay = [self.minBeginningDate dateByAddingDays:offset/CGRectGetWidth(self.collectionView.bounds)];
+        NSDate *monthFirstDay = [NSDate dateWithYear:firstDay.year month:firstDay.month day:1];
+        if(![self.currentMonthBeginningDate isEqualToDate:monthFirstDay]){
+            self.currentMonthBeginningDate = monthFirstDay;
+        }
+        //计算当前行所在的row
+        NSInteger weekDay = firstDay.weekday;
+        NSInteger index = firstDay.day-1+([YQCalendarAppearence share].firstDayIsSunday? weekDay-1:weekDay-2);
+        self.targetRow = index/RowCountMonthMode;
+        self.targetRowOriginY = self.targetRow*self.collectionLayout.itemSize.height-self.headerView.frame.size.height;
     }
 }
 - (NSInteger)sectionIndexOfDate:(NSDate *)date{
