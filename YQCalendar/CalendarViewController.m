@@ -10,8 +10,7 @@
 #import "YQCalendar.h"
 #import <POP.h>
 static CGFloat const RowHeight = 50.0f;
-static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
-@interface CalendarViewController () <UITableViewDelegate,UITableViewDataSource,YQCalendarDelegate>
+@interface CalendarViewController () <UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) YQCalendar *monthCalendar;
@@ -38,7 +37,7 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
     
 
     self.monthCalendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, RowHeight*RowCountMonthMode)];
-    [self.tableView addCalendar:self.monthCalendar];
+//    [self.tableView addCalendar:self.monthCalendar];
     self.originalInsetTop = self.tableView.contentInset.top+NavHeight(self);
     self.monthCalendar.delegate = self;
  
@@ -49,7 +48,7 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
     self.monthCalendar.headerView = self.calendarHeader;
    
    
-    self.weekCalendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.calendarHeader.frame), self.tableView.bounds.size.width, RowHeight) appearence:nil mode:YQCalendarModeWeek];
+//    self.weekCalendar = [[YQCalendar alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.calendarHeader.frame), self.tableView.bounds.size.width, RowHeight) appearence:nil mode:YQCalendarModeWeek];
     [self.view addSubview:self.weekCalendar];
     self.weekCalendar.delegate = self;
     self.weekCalendar.hidden = YES;
@@ -86,7 +85,7 @@ static NSString *const ContentInsetAnimation = @"ContentInsetAnimation";
     if(calendar == self.monthCalendar){
         [self.weekCalendar scrollToDate:date];
     }else if(calendar == self.weekCalendar){
-    
+        
     }
 }
 
