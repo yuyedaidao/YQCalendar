@@ -109,7 +109,7 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
     self.originalInsetTop = self.scrollView.contentInset.top;
     self.minInsetTop = CGRectGetHeight(self.weekCalendar.bounds);
     self.weekCalendar.frame = CGRectMake(CGRectGetMinX(self.scrollView.frame), CGRectGetMinY(self.scrollView.frame), self.scrollView.frame.size.width, self.weekCalendar.frame.size.height);
-    self.minMoveDistance = CGRectGetHeight(self.weekCalendar.frame);
+    self.minMoveDistance = CGRectGetHeight(self.weekCalendar.frame)/2;
 }
 - (void)willMoveToSuperview:(UIView *)newSuperview{
 //    [newSuperview addSubview:self.weekCalendar];
@@ -138,8 +138,11 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
 
 #pragma mark calendarScroll delegate
 - (void)calendarScrollViewDidScroll:(UIScrollView *)scrollView{
-
+    
     if(scrollView.isDragging || scrollView.isDecelerating){
+        if(scrollView.contentOffset.y >= -self.originalInsetTop && scrollView.contentOffset.y <= -self.minInsetTop){
+            [scrollView setContentInset:UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0)];
+        }
         [self checkWeekCalendarShouldShowBySelf:self];
     }
 
@@ -149,7 +152,6 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
         self.criticalOriginY = self.monthCalendar.targetRowOriginY+CGRectGetMinY(self.frame);
     }else{
         self.criticalOriginY = self.weekCalendar.targetRowOriginY+CGRectGetMinY(self.frame);
-        NSLog(@"self.criticalOriginY == %lf",self.criticalOriginY);
     }
     self.begeinDragOffset = scrollView.contentOffset.y;
 
@@ -163,7 +165,9 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
 - (void)calendarScrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
     
     //如果往上滑目标到不了最高边界，直接到最低边界
-    if(velocity.y > 0){//往上
+   
+    if(velocity.y > 0){//往上，如果是回弹效果的话，不是往上是往下
+        NSLog(@"减速 将要往上");
         //如果当前在最低以下，目标位置不管在哪都到最高处 当然移动范围得超过阀值
         if(scrollView.contentOffset.y <= -self.minInsetTop){
             CGFloat distance = self.scrollView.contentOffset.y-self.begeinDragOffset;
@@ -177,6 +181,7 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
         }
         
     }else if(velocity.y < 0){
+        NSLog(@"减速 将要往下");
         if(scrollView.contentOffset.y >= -self.originalInsetTop){
             
             CGFloat distance = self.scrollView.contentOffset.y-self.begeinDragOffset;
@@ -240,20 +245,7 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
     return animation;
 }
 - (void)checkWeekCalendarShouldShowBySelf:(YQCalendarView *)mySelf{
-    NSLog(@"myself contentoffset y %lf, origiy = %lf",self.scrollView.contentOffset.y,self.criticalOriginY);
     //这里不能 >= 在等于的情况下是不应该显示的,但是如果选中的在最后一行，此时如果等于也需要显示
-//    if(mySelf.criticalOriginY == -(CGRectGetHeight(self.weekCalendar.frame))){
-//        if(mySelf.scrollView.contentOffset.y == mySelf.criticalOriginY){
-//            if(mySelf.weekCalendar.isHidden){
-//                mySelf.weekCalendar.hidden = NO;
-//            }
-//        }else{
-//            if(!mySelf.weekCalendar.isHidden){
-//                mySelf.weekCalendar.hidden = YES;
-//            }
-//        }
-//    }else{
-    
     if(mySelf.criticalOriginY == -CGRectGetHeight(self.weekCalendar.frame)){
         
         if(mySelf.scrollView.contentOffset.y >= mySelf.criticalOriginY){
@@ -284,9 +276,9 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
         CGFloat difference = self.scrollView.contentOffset.y-self.begeinDragOffset;
         if(self.weekCalendar.hidden){
             //正往上
-            if(difference > CGRectGetHeight(self.weekCalendar.bounds)){
+            if(difference > self.minMoveDistance){
                 //切换到周视图
-                
+                NSLog(@"正常 将要往上 变换");
                 POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
 //                animation.fromValue = @(self.scrollView.contentInset.top);
 //                animation.toValue = @(self.minInsetTop);
@@ -294,7 +286,7 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
                 animation.toValue = @(-self.minInsetTop);
                 
             }else{
-                
+                NSLog(@"正常 将要往下 原样");
                 POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
 //                animation.fromValue = @(self.scrollView.contentInset.top);
 //                animation.toValue = @(self.originalInsetTop);
@@ -302,13 +294,15 @@ typedef NS_ENUM(NSUInteger, YQScrollState) {
                 animation.toValue = @(-self.originalInsetTop);
             }
         }else{
-            if(difference < -CGRectGetHeight(self.weekCalendar.bounds)){
+            if(difference < -self.minMoveDistance){
+                NSLog(@"正常 将要往下 变化");
                 POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
 //                animation.fromValue = @(self.scrollView.contentInset.top);
 //                animation.toValue = @(self.originalInsetTop);
                 animation.fromValue = @(self.scrollView.contentOffset.y);
                 animation.toValue = @(-self.originalInsetTop);
             }else{
+                NSLog(@"正常 将要往上 原样");
                 POPBasicAnimation *animation = [self scrollViewContentInsetAnimation];
 //                animation.fromValue = @(self.scrollView.contentInset.top);
 //                animation.toValue = @(self.minInsetTop);

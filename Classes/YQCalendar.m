@@ -110,7 +110,9 @@ static NSString *const KeyPathContentOffset = @"contentOffset";
                 
             }else if(today.month == date.month){
                 //今天
-                self.targetRow = [today daysLaterThan:date]/ColumnCount;
+                NSInteger weekDay = date.weekday;
+                NSInteger index = today.day-1+([YQCalendarAppearence share].firstDayIsSunday? weekDay-1:weekDay-2);
+                self.targetRow = index/ColumnCount;
             }else{
                 self.targetRow = 0;
             }
@@ -140,15 +142,15 @@ static NSString *const KeyPathContentOffset = @"contentOffset";
         self.currentMonthBeginningDate = [self.minBeginningDate dateByAddingMonths:offset/CGRectGetWidth(self.collectionView.bounds)];
     }else if(self.mode == YQCalendarModeWeek){
         //这一周第一天是哪个月就算哪个月
-        NSDate *firstDay = [self.minBeginningDate dateByAddingDays:offset/CGRectGetWidth(self.collectionView.bounds)];
+        NSDate *firstDay = [self.minBeginningDate dateByAddingDays:offset/CGRectGetWidth(self.collectionView.bounds)];//这一行的第一天即这一周的第一天
         NSDate *monthFirstDay = [NSDate dateWithYear:firstDay.year month:firstDay.month day:1];
         if(![self.currentMonthBeginningDate isEqualToDate:monthFirstDay]){
             self.currentMonthBeginningDate = monthFirstDay;
         }
         //计算当前行所在的row
-        NSInteger weekDay = firstDay.weekday;
+        NSInteger weekDay = monthFirstDay.weekday;
         NSInteger index = firstDay.day-1+([YQCalendarAppearence share].firstDayIsSunday? weekDay-1:weekDay-2);
-        self.targetRow = index/RowCountMonthMode;
+        self.targetRow = index/ColumnCount;
         self.targetRowOriginY = self.targetRow*self.collectionLayout.itemSize.height-self.headerView.frame.size.height;
     }
 }
